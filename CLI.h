@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <algorithm>
 #include <string>
 #include <thread>
 #include <sys/socket.h>
@@ -26,6 +27,7 @@ class CLI {
     DefaultIO* dio;
     SharedData* shared;
     CommandUploadCSV* CommandCSV;
+    CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:
     CLI(DefaultIO* dio);

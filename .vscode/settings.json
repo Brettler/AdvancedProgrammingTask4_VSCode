@@ -4,6 +4,12 @@
         "iostream": "cpp",
         "fstream": "cpp",
         "string": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "string_view": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "iosfwd": "cpp"
     }
 }

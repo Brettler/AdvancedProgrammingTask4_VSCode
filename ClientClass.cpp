@@ -36,10 +36,16 @@ int ClientClass::run() {
 
 void ClientClass::InterfaceSendFile (string& path) {
     ifstream FileCSV(path);
+
     string TrainContent((istreambuf_iterator<char>(FileCSV)), istreambuf_iterator<char>());
     FileCSV.close();
+    // counting the number of \n there is in the file (this is the number of rows)
+    // +1 because the last line is not finished with \n
+    int num_of_rows = 1 + count(TrainContent.begin(), TrainContent.end(), '\n');
     // Send the contents of the file to the server
-    Socket->write(TrainContent);
+    Socket->write(num_of_rows);
+    // We will add 'end-of-message' marker to know when we finished reading the messege
+    Socket->write(TrainContent + "\n//EOM_MARKER");
     string response = Socket->read(); // upload complete
     cout << response << endl;
     if (response == "Invalid input.") {
@@ -54,7 +60,7 @@ void ClientClass::InterfaceSendFile (string& path) {
     string TestContent((istreambuf_iterator<char>(TestCSV)), istreambuf_iterator<char>());
     TestCSV.close();
     // Send the contents of the file to the server
-    Socket->write(TestContent);
+    Socket->write(TestContent + "@");
     response = Socket->read();
     cout << response << endl;
     if (response == "Invalid input.") {
@@ -66,7 +72,7 @@ void ClientClass::InterfaceSendFile (string& path) {
 
 
 
-void ClientClass::SendMessages(SocketIO* ServerSocket) {
+void ClientClass::SendMessages(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     ifstream in("input.txt");
     string input;
@@ -87,22 +93,49 @@ void ClientClass::SendMessages(SocketIO* ServerSocket) {
 //in.close();
 
 
-void ClientClass::ReceiveMessages(SocketIO* ServerSocket,string OutputFile) {
+void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
     this -> Socket = ServerSocket;
     ofstream pr(OutputFile);
-    string input="";
+    string input = "";
+    ifstream in("input.txt");
     while(input != "8"){
+        //cout << "Client call PrintMenu()" << endl;
         PrintMenu();
-        input = Socket -> read();
-        if(input=="1"){
-            cout << input << endl; // please upload...
-            input="";
-            while(input!="done"){
-                input = Socket -> read();
-                cout << input << endl;
-            }
-            cout << Socket -> read() << endl; // Upload complete
+        //cout << "Finsish Reading Menu and now waiting for input from the user: " << endl;
+        getline(cin, input);
+        //cout << "Send input to the server " << input << endl;
+        Socket -> write(input+'\n');
+        //cout << "Reading response from the server " << endl;
+        string respond = Socket -> read();
+        // if the respond is invalid we want to print again the menu
+        if (respond == "invalid input") {
+            cout << respond;
+            continue;
         }
+        // Execute command uploadCSVV
+        if (input == "1"){
+            //cout << "We are in statement when input == 1 \n";
+            //cout << "Reading response from the server " << endl;
+            cout << respond;; // "Please upload your local train CSV file.\n"
+            string path;
+            cin >> path;
+            InterfaceSendFile(path);
+
+
+
+
+        }
+        
+
+        // if(input=="1"){
+        //     cout << input << endl; // please upload...
+        //     input="";
+        //     while(input!="done"){
+        //         input = Socket -> read();
+        //         cout << input << endl;
+        //     }
+        //     cout << Socket -> read() << endl; // Upload complete
+        // }
     }
     pr.close();
 }
@@ -114,9 +147,9 @@ void ClientClass::PrintMenu(){
     while(!FlagFinishReading){
         // read string line
         string RowInMenu = Socket -> read();
-        if(RowInMenu == "6.exit")
-            FlagFinishReading = true;
         cout << RowInMenu<<endl;
+        if(RowInMenu == "8.exit")
+            FlagFinishReading = true;
     }
 
 }
