@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <algorithm>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -27,14 +28,14 @@ private:
     // Server's IP address and port number.
     const char* BufferIPAddress;
     int ClientPort;
-    SocketIO* Socket;
+    DefaultIO* Socket;
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
     // Functions:
     int run();
-    void SendMessages(SocketIO* ServerSocket);
-    void ReceiveMessages(SocketIO* ServerSocket,string outputFile);
+    void SendMessages(DefaultIO* ServerSocket);
+    void ReceiveMessages(DefaultIO* ServerSocket,string outputFile);
     void PrintMenu();
     void InterfaceSendFile (string& path);
     //void ClientInteraction(int ServerSocket, string output);

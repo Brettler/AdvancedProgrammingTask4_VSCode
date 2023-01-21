@@ -16,4 +16,4 @@ Command::~Command(){}
     return this->shared;
 }*/
 
-void Command::execute(SharedData* SharedInfo) {}
+void Command::execute(SharedData* shared) {}

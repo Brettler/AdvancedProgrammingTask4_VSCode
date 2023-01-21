@@ -8,5 +8,5 @@ DefaultIO::~DefaultIO(){};
 
 string DefaultIO::read(){};
 void DefaultIO::write(string information){};
-void DefaultIO::write(float f){};
-void DefaultIO::read(float* f){};
+//void DefaultIO::write(float f){};
+//void DefaultIO::read(float* f){};
