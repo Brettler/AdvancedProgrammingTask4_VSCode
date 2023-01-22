@@ -14,7 +14,7 @@ DataImport::~DataImport() {
 }
 
 // Converts data from a CSV file into a map of vector-label pairs.
-void DataImport::ReadClassifiedData() {
+bool DataImport::ReadClassifiedData() {
 
     ifstream data(this->DataName);
     vector<double> buffer;
@@ -37,14 +37,24 @@ void DataImport::ReadClassifiedData() {
 
         label = sample.back();
         // Checking if the label is empty or just with whitespaces.
-        ic.ValidLabel(label);
+        if (!ic.ValidLabel(label)){
+            return false;
+        }
 
         sample.pop_back();
         // Check if the row contains any white space characters.
-        ic.WhitespacesFileCheck(sample);
+        if (!ic.WhitespacesFileCheck(sample)){
+            return false;
+        }
 
-        // Convert the strings into doubles.
-        vector<double> SampleDouble = ic.StringToDouble(sample);
+        vector<double> SampleDouble;
+
+        if (!ic.ValidStringToDouble(sample)){
+            return false;
+        } else {
+            // Convert the strings into doubles.
+            SampleDouble = ic.StringToDouble(sample);
+        }
 
         // Compare the size of the first vector against all other vectors to make sure they're the same.
         // If they are all the same size, continue. Otherwise, terminate the program.
@@ -55,27 +65,76 @@ void DataImport::ReadClassifiedData() {
         else {
             bool ValidVectorSize = ic.ValidVectorSizeCheck(buffer, SampleDouble);
             if (!ValidVectorSize) {
-                cerr << "Error: Vectors in the file must be in the same size." << endl;
-                exit(1);
+                return false;
             }
         }
 
         // If we come across a vector that already exists in the map, skip.
         // Otherwise, insert into map.
-        if (DataMap.find(SampleDouble) != DataMap.end()) {
+        if (this -> DataMap.find(SampleDouble) != this -> DataMap.end()) {
             continue;
         }
         else {
-            DataMap[SampleDouble] = label;
+            this -> DataMap[SampleDouble] = label;
         }
     }
 
     // Check if the file is empty by checking if the map is empty.
-    ic.EmptyFileCheck(DataMap);
+    if (!ic.EmptyFileCheck(this -> DataMap)){
+        return false;
+    }
+
+    return true;
 }
+
+bool DataImport::ReadUnclassifiedData(){
+    
+    ifstream data(this->DataName);
+    string row;
+    InputCheck ic;
+    auto TrainSetVector = this -> DataMap.begin() -> first;
+
+    // Each line in the csv file will be inserted into 'row' as a string.
+    while (getline(data, row))
+    {
+        vector<string> sample;
+        stringstream ss(row);
+        string feature;
+
+        // Parse the row to extract the sample features and label.
+        while (getline(ss, feature, ',')) {
+            sample.push_back(feature);
+        }
+
+        // Check if the row contains any white space characters.
+        if (!ic.WhitespacesFileCheck(sample)){
+            return false;
+        }
+
+        vector<double> SampleDouble;
+
+        if (!ic.ValidStringToDouble(sample)){
+            return false;
+        } else {
+            // Convert the strings into doubles.
+            SampleDouble = ic.StringToDouble(sample);
+        }
+
+        // Compare the size of the first vector of the training set against all other vectors to make sure they're the same.
+        // If they are all the same size, continue. Otherwise, terminate the program.
+        bool ValidVectorSize = ic.ValidVectorSizeCheck(TrainSetVector, SampleDouble);
+        if (!ValidVectorSize) {
+            return false;
+        }
+
+        this -> UnclassifiedData.push_back(SampleDouble);
+    }
+    return true;
+}
+
 
 // Getters:
 const map<vector<double>, string>& DataImport::GetDataMap() const {
-    return DataMap;
+    return this -> DataMap;
 }
 

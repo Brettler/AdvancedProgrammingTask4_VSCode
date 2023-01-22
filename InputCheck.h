@@ -23,13 +23,14 @@ public:
     bool ValidClientMessage(const string& StringInput) const;
     bool ValidVectorSizeCheck(const vector<double>& a, const vector<double>& b) const;
     bool ValidDoubleVector(const string& input) const;
-    void ValidLabel(const string& label) const;
+    bool ValidLabel(const string& label) const;
     int ValidKNumber(const string& k) const;
     int ValidPortCheck(const string& PortString) const;
-    string FileName(string DataName) const;
+    bool ValidFilePath(string DataName);
     void ValidNumberArgs(const int& argc) const;
     void ValidIPv4Address(const string& ip) const;
-    void WhitespacesFileCheck(const vector<string>& feature) const;
-    void EmptyFileCheck(const map<vector<double>, string>& DataMap) const;
+    bool WhitespacesFileCheck(const vector<string>& feature) const;
+    bool EmptyFileCheck(const map<vector<double>, string>& DataMap) const;
+    bool ValidStringToDouble(const vector<string>& s) const;
 };
 #endif

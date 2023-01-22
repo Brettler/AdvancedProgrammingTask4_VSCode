@@ -29,6 +29,7 @@ private:
     const char* BufferIPAddress;
     int ClientPort;
     DefaultIO* Socket;
+    InputCheck InCheck;
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
@@ -37,7 +38,7 @@ public:
     void SendMessages(DefaultIO* ServerSocket);
     void ReceiveMessages(DefaultIO* ServerSocket,string outputFile);
     void PrintMenu();
-    void InterfaceSendFile (string& path);
+    bool InterfaceSendFile (string& path);
     //void ClientInteraction(int ServerSocket, string output);
 };
 

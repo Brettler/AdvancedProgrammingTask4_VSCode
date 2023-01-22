@@ -17,16 +17,17 @@ using namespace std;
 class DataImport {
 private:
     string DataName;
-    string UnclassifiedDataName;
     ifstream file;
     map<vector<double>, string> DataMap;
+    vector<vector<double>> UnclassifiedData;
 
 public:
     // Constructor & Destructor:
     explicit DataImport(const string& DataName);
     ~DataImport();
     // Functions:
-    void ReadClassifiedData();
+    bool ReadClassifiedData();
+    bool ReadUnclassifiedData();
     // Getters:
     const map<vector<double>, string>& GetDataMap() const;
 };

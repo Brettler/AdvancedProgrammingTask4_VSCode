@@ -28,12 +28,12 @@ void CLI::start(){
         for (int i = 0; i < CommandsVec.size(); ++i) {
             dio -> write(CommandsVec[i]->GetDescription());
         }
-        cout << "Server Waiting for user choise: " << endl;
+        //cout << "Server Waiting for user choise: " << endl;
         string ClientRespond = dio -> read();
-        cout << "User Choise is: " << ClientRespond << endl;
-        cout << "Now trying to conver choise to an int" << endl;
+        //cout << "User Choise is: " << ClientRespond << endl;
+        //cout << "Now trying to conver choise to an int" << endl;
         UserChoice = atoi(ClientRespond.c_str());
-        cout <<"Conver Success" << endl;
+        //cout <<"Conver Success" << endl;
         if (count(ValidChoices.begin(), ValidChoices.end(), UserChoice) == 0) {
             dio -> write("Invalid Choose.\n") ;
             continue;
@@ -57,6 +57,7 @@ void CLI::start(){
 }
 
 CLI::~CLI() {
+    delete shared;
     for(size_t i=0;i<CommandsVec.size();i++){
         delete CommandsVec[i];
     }
