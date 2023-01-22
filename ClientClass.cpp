@@ -34,39 +34,40 @@ int ClientClass::run() {
 }
 
 
-void ClientClass::InterfaceSendFile (string& path) {
-    ifstream FileCSV(path);
+bool ClientClass::InterfaceSendFile (string& path) {
 
+    ifstream FileCSV(path);
     string TrainContent((istreambuf_iterator<char>(FileCSV)), istreambuf_iterator<char>());
     FileCSV.close();
-    // counting the number of \n there is in the file (this is the number of rows)
-    // +1 because the last line is not finished with \n
-    int num_of_rows = 1 + count(TrainContent.begin(), TrainContent.end(), '\n');
-    // Send the contents of the file to the server
-    Socket->write(num_of_rows);
+
     // We will add 'end-of-message' marker to know when we finished reading the messege
-    Socket->write(TrainContent + "\n//EOM_MARKER");
+    Socket->write(TrainContent + "\n" + "//EOM_MARKER\n");
     string response = Socket->read(); // upload complete
     cout << response << endl;
-    if (response == "Invalid input.") {
-        return;
+    if (response == "invalid input") {
+        return false;
     }
     response = Socket->read(); // "Please enter the path to the test file:
     cout << response << endl;
     string TestPath;
     cin >> TestPath;
+    if (!InCheck.ValidFilePath(TestPath)){
+        cout << "invalid input";
+        return false;
+    }
     // Read the contents of the file
     ifstream TestCSV(TestPath);
     string TestContent((istreambuf_iterator<char>(TestCSV)), istreambuf_iterator<char>());
     TestCSV.close();
     // Send the contents of the file to the server
-    Socket->write(TestContent + "@");
+    Socket->write(TestContent + "\n" + "//EOM_MARKER\n");
     response = Socket->read();
     cout << response << endl;
-    if (response == "Invalid input.") {
-        return;
+    if (response == "invalid input") {
+        return false;
     }
     cout << response << endl; // Upload Complete
+    return true;
 }
 
 
@@ -119,23 +120,24 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             cout << respond;; // "Please upload your local train CSV file.\n"
             string path;
             cin >> path;
-            InterfaceSendFile(path);
-
-
-
-
+            bool ValidFilePath = InCheck.ValidFilePath(path);
+            cout << " bool ValidFilePath = " << ValidFilePath << endl;
+            bool semek = true;
+            if (semek)
+            {
+                cout << "invalid input";
+                continue;
+            } 
+            else
+            {
+                cout << "joining the else???? " << endl;
+                if (!InterfaceSendFile(path)){
+                    cout <<" Joining if into else???\n";
+                    continue;
+                }  
+            }
+            cout << "Im a mother fucker didnt join the if statement and the ele statemnt\n";
         }
-        
-
-        // if(input=="1"){
-        //     cout << input << endl; // please upload...
-        //     input="";
-        //     while(input!="done"){
-        //         input = Socket -> read();
-        //         cout << input << endl;
-        //     }
-        //     cout << Socket -> read() << endl; // Upload complete
-        // }
     }
     pr.close();
 }

@@ -3,6 +3,7 @@
 
 #ifndef HEADER_SHAREDDATA_H
 #define HEADER_SHAREDDATA_H
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -14,34 +15,55 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fstream>
+#include "DataImport.h"
+
 using namespace std;
 
-class SharedData{
+// class SharedData{
+// private:
+//     string path;
+//     int* k;
+//     string* metric;
+//     DataImport* data;
+// public:
+//     SharedData();
+//     ~SharedData();
+//     void SetPath(string FilePath);
+
+
+//     string GetPath();
+//     int* GetK();
+//     string* GetMetric();
+//     DataImport* GetData(string* path);
+
+// };
+
+class SharedData {
 private:
-    string* path;
+    string ClassifiedPath;
+    string UnclassifiedPath;
     int* k;
     string* metric;
+    DataImport* ClassifiedData;
+    DataImport* UnclassifiedData;
 public:
     SharedData();
+
     ~SharedData();
-    string* GetPath();
+
+    void SetClassifiedPath(string FilePath);
+    string GetClassifiedPath();
+
+    void SetUnclassifiedPath(string FilePath);
+    string GetUnclassifiedPath();
+
     int* GetK();
+
     string* GetMetric();
 
-/*    string path;
-    int k;
-    string metric;
-    //vector<fixdReport> fixdRports;
-    const map<vector<double>, string>& DataMap;
-    ShareStruct() {
-        string path;
-        int k;
-        string metric;
-    }*/
-
+    DataImport* GetClassifiedData();
+    DataImport* GetUnclassifiedData();
+        
 };
-
-
-
 
 #endif //ADVANCEDPROGRAMMINGTASK4_SHAREDDATA_H

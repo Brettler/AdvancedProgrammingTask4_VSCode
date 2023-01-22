@@ -8,7 +8,7 @@ SocketIO::~SocketIO(){}
 
 // Reading from socket
  string SocketIO::read(){
-    cout << "Using Read function from SocketIO" << endl;
+    //cout << "Using Read function from SocketIO" << endl;
     string ServerMessage;
     char c = 0;
     // Reads the first character from the socket
@@ -19,13 +19,13 @@ SocketIO::~SocketIO(){}
         ServerMessage += c;
         ::read(ClientSocket, &c, sizeof(char));
     }
-    cout << "SocketIO::read() return: " << ServerMessage << endl;
+    //cout << "SocketIO::read() return: " << ServerMessage << endl;
     return ServerMessage;
 }
 
 // Write message through the socket connection
  void SocketIO::write(string information){
-    cout << "Using SocketIO::write with the string: " << information << endl;
+    //cout << "Using SocketIO::write with the string: " << information << endl;
     ::write(ClientSocket, information.c_str(), information.length());
     //::write(ClientSocket, "\n", 1);
  }

@@ -10,6 +10,11 @@
         "string_view": "cpp",
         "chrono": "cpp",
         "algorithm": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "new": "cpp"
     }
 }

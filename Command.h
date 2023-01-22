@@ -5,8 +5,13 @@
 #define HEADER_COMMAND_H
 #include <iostream>
 #include <string>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "DefaultIO.h"
 #include "SharedData.h"
+#include "DataImport.h"
 using namespace std;
 
 
@@ -30,7 +35,7 @@ public:
     ~CommandUploadCSV();
     void execute(SharedData* shared) override;
     string GetDescription() override;
-    void UploadFile(string FileCSV, string UploadMessage);
+    bool UploadFile(string FileCSV, string UploadMessage);
 };
 
 class CommandExit : public Command {
