@@ -30,7 +30,7 @@ bool InputCheck::ValidDoubleVector(const string& input) const {
 
 // Validate the user input received in the client.
 bool InputCheck::ValidClientMessage(const string& StringInput) const {
-    vector<double> DoubleVec;
+    //vector<double> DoubleVec;
     string TempStringInput = StringInput;
     string metric;
     string KString;
@@ -38,28 +38,32 @@ bool InputCheck::ValidClientMessage(const string& StringInput) const {
     istringstream is(TempStringInput);
 
     // Read the vector values.
-    while (is >> TempStringInput) {
-        try {
-            // If the conversion from string to double using 'stod' is successful, we will perform additional checks to
-            // catch edge cases such as "12abc", which 'stod' will convert without an issue, but is an invalid value.
-            stod(TempStringInput);
-            bool FlagValidChars = ValidDoubleVector(TempStringInput);
-            if (!FlagValidChars) {
-                // If the input is not a valid number, it must be a distance measurement.
-                metric = TempStringInput;
-                break;
-            }
-        }
-        catch (exception& invalid_value) {
-            // If the input is not a valid number, it must be a distance measurement.
-            metric = TempStringInput;
-            break;
-        }
-    }
+    // while (is >> TempStringInput) {
+    //     try {
+    //         // If the conversion from string to double using 'stod' is successful, we will perform additional checks to
+    //         // catch edge cases such as "12abc", which 'stod' will convert without an issue, but is an invalid value.
+    //         stod(TempStringInput);
+    //         bool FlagValidChars = ValidDoubleVector(TempStringInput);
+    //         if (!FlagValidChars) {
+    //             // If the input is not a valid number, it must be a distance measurement.
+    //             metric = TempStringInput;
+    //             break;
+    //         }
+    //     }
+    //     catch (exception& invalid_value) {
+    //         // If the input is not a valid number, it must be a distance measurement.
+    //         metric = TempStringInput;
+    //         break;
+    //     }
+    // }
 
-    // Read and validate the k value.
     is >> KString;
     int k = ValidKNumber(KString);
+
+    is >> metric;
+    //metric = TempStringInput;
+    // Read and validate the k value.
+    
 
     // Validate the metric.
     if (!ValidDistanceMetric(metric) || k == -1) {

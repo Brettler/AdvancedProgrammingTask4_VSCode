@@ -27,6 +27,7 @@ class CLI {
     DefaultIO* dio;
     SharedData* shared;
     CommandUploadCSV* CommandCSV;
+    CommandSettingsKNN* CommandSettings;
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:
