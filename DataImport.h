@@ -27,7 +27,7 @@ public:
     ~DataImport();
     // Functions:
     bool ReadClassifiedData();
-    bool ReadUnclassifiedData();
+    bool ReadUnclassifiedData(map<vector<double>, string> TrainMap);
     // Getters:
     const map<vector<double>, string>& GetDataMap() const;
 };
