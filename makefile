@@ -1,13 +1,13 @@
-OBJS	= DistanceCalc.o InputCheck.o DataImport.o KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandExit.o CLI.o Server.o ServerClass.o Client.o ClientClass.o
+OBJS	= DistanceCalc.o InputCheck.o DataImport.o KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandSettingsKNN.o CommandExit.o CLI.o Server.o ServerClass.o Client.o ClientClass.o
 OUT	= server.out,client.out
 
-OBJS0	= DistanceCalc.o InputCheck.o DataImport.o KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandExit.o CLI.o Server.o ServerClass.o
-SOURCE0	= DistanceCalc.cpp InputCheck.cpp DataImport.cpp KNN.cpp SharedData.cpp Server.cpp ServerClass.cpp CLI.cpp Command.cpp CommandUploadCSV.cpp CommandExit.cpp DefaultIO.cpp SocketIO.cpp
+OBJS0	= DistanceCalc.o InputCheck.o DataImport.o KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandSettingsKNN.o CommandExit.o CLI.o Server.o ServerClass.o
+SOURCE0	= DistanceCalc.cpp InputCheck.cpp DataImport.cpp KNN.cpp SharedData.cpp Server.cpp ServerClass.cpp CLI.cpp Command.cpp CommandUploadCSV.cpp CommandSettingsKNN.cpp CommandExit.cpp DefaultIO.cpp SocketIO.cpp
 HEADER0	= DistanceCalc.h InputCheck.h DataImport.h KNN.h SharedData.h DefaultIO.h Command.h CLI.h Server.h ServerClass.h
 OUT0	= server.out
 
-OBJS1	= DistanceCalc.o InputCheck.o DataImport.o  KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandExit.o CLI.o Client.o ClientClass.o
-SOURCE1	= DistanceCalc.cpp InputCheck.cpp DataImport.cpp KNN.cpp SharedData.cpp CLI.cpp Command.cpp CommandUploadCSV.cpp CommandExit.cpp SocketIO.cpp Client.cpp ClientClass.cpp
+OBJS1	= DistanceCalc.o InputCheck.o DataImport.o  KNN.o SharedData.o DefaultIO.o SocketIO.o Command.o CommandUploadCSV.o CommandSettingsKNN.o CommandExit.o CLI.o Client.o ClientClass.o
+SOURCE1	= DistanceCalc.cpp InputCheck.cpp DataImport.cpp KNN.cpp SharedData.cpp CLI.cpp Command.cpp CommandUploadCSV.cpp CommandSettingsKNN.cpp CommandExit.cpp SocketIO.cpp Client.cpp ClientClass.cpp
 HEADER1	= DistanceCalc.h InputCheck.h DataImport.h KNN.h SharedData.h DefaultIO.h Command.h CLI.h Client.h ClientClass.h
 OUT1	= client.out
 
@@ -49,6 +49,9 @@ Command.o: Command.cpp
 
 CommandUploadCSV.o: CommandUploadCSV.cpp
 	$(CC) $(FLAGS) CommandUploadCSV.cpp -std=c11
+
+CommandSettingsKNN.o: CommandSettingsKNN.cpp
+	$(CC) $(FLAGS) CommandSettingsKNN.cpp -std=c11
 
 CommandExit.o: CommandExit.cpp
 	$(CC) $(FLAGS) CommandExit.cpp -std=c11

@@ -4,19 +4,19 @@
 #include "SharedData.h"
 
 SharedData::SharedData() {
-    k = nullptr;
-    metric = nullptr;
+    k = 5;
+    metric = "AUC";
     ClassifiedData = nullptr;
     UnclassifiedData = nullptr;
 }
 
 SharedData::~SharedData() {
-    if (k != nullptr) {
-         delete k;
-    }
-    if (metric != nullptr) {
-         delete metric;
-    }
+    // if (k != nullptr) {
+    //      delete k;
+    // }
+    // if (metric != nullptr) {
+    //      delete metric;
+    // }
     if (ClassifiedData != nullptr) {
         delete ClassifiedData;
     }
@@ -41,14 +41,23 @@ string SharedData::GetUnclassifiedPath() {
     return this -> UnclassifiedPath;
 }
 
-
-int* SharedData::GetK() {
+int SharedData::GetK() const{ 
    return this -> k;
 }
 
-string* SharedData::GetMetric() {
+void SharedData::SetK(int& NewK) {
+    this -> k = NewK;
+}
+
+string SharedData::GetMetric() const{
     return this -> metric;
 }
+
+void SharedData::SetMetric(string& NewMetric) {
+    this -> metric = NewMetric;
+}
+
+
 
 DataImport* SharedData::GetClassifiedData() {
     if (ClassifiedData == nullptr) {

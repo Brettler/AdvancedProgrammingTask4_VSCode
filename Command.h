@@ -47,7 +47,6 @@ public:
 };
 
 
-
 class CommandExit : public Command {
 public:
     explicit CommandExit(DefaultIO* dio, SharedData* shared);
@@ -55,8 +54,6 @@ public:
     void execute(SharedData* shared) override;
     string GetDescription() override;
 };
-
-
 
 
 

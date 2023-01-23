@@ -101,31 +101,31 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
     this -> Socket = ServerSocket;
     ofstream pr(OutputFile);
     string input = "0";
-    string respond;
+    string respond ="0";
     ifstream in("input.txt");
     while(input != "8"){
   
         //cout << "First line of the loop " << endl;
         //cout << "Client call PrintMenu()" << endl;
         PrintMenu();
-        
         //cout << "Check input before using getline: " << input << endl;
         //cout << "Finsish Reading Menu and now waiting for input from the user: " << endl;
         //getline(cin, input);
         cin >> input;
-     
         //cout << "Check input after doing complicated if: " << input << endl;
         Socket -> write(input+'\n');
-        //cout << "Respond is: " << respond << endl;
-        respond = Socket -> read();
-        //cout << "Respond after socket reading is: " << respond << endl;
-        // if the respond is invalid we want to print again the menu
-        if (respond == "invalid input") {
-            cout << respond << endl;
-            continue;
-        }
+
         // Execute command uploadCSVV
         if (input == "1"){
+            
+            //cout << "Respond is: " << respond << endl;
+            respond = Socket -> read();
+            //cout << "Respond after socket reading is: " << respond << endl;
+            // if the respond is invalid we want to print again the menu
+            if (respond == "invalid input") {
+                cout << respond << endl;
+                continue;
+            }
             //cout << "We are in statement when input == 1 \n";
             //cout << "Reading response from the server " << endl;
             cout << respond; // "Please upload your local train CSV file.\n"
@@ -146,6 +146,50 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
                 cout << "invalid input\n";
                 continue;
             }
+        }
+        if (input == "2") {
+            string UserSettingInput ="0";   
+            string UserMetric = "0"; 
+            string UserK = "0";
+            // Read corrent k from the user.
+            string CorrentK = Socket -> read();
+            cout << CorrentK << endl;
+            // Read corrent mertic from the user.
+            string CorrentMetric = Socket -> read();
+            cout << CorrentMetric << endl;
+            cout << "The current KNN parameters are: K = " << CorrentK << ", distance metric = " << CorrentMetric << endl;
+            cin.ignore();
+            getline(cin, UserSettingInput);
+            cout << "UserSettingInput is: " << UserSettingInput << endl;
+            istringstream is(UserSettingInput);
+            is >> UserK;
+            cout << "UserK = " << UserK << endl;
+            is >> UserMetric;
+            cout << "UserMetric = " << UserMetric << endl;
+            // if (UserSettingInput == "0" || UserMetric == "0" || UserK =="0") {
+            //     // Send the server that he need to go back to CLI to send the client the menu
+            //     cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+            //     Socket -> write(UserK+ " " + UserMetric+'\n');
+            //     continue;            
+            // } else {
+            //     // Send the server the setting the user wants; "<K> <metric>"
+            //     Socket -> write(UserK+ " " +UserMetric+'\n');        
+            // }
+            // // Send the server the setting the user wants; "<K> <metric>"
+            Socket -> write(UserK+ " " +UserMetric+'\n');
+            // Catch errors from the server.
+            // Catch if both of the arguments are invalid
+            string ServerCheck = Socket -> read();
+            if (ServerCheck == "invalid_k_metric"){
+                cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+            }
+            else if (ServerCheck == "invalid_k"){
+                cout << "invalid value for K" << endl;
+            }
+            else if (ServerCheck == "invalid_metric"){
+                cout << "invalid value for metric" << endl;
+            }
+            continue;
         }
     }
 

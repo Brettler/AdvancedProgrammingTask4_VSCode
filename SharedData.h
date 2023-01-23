@@ -42,8 +42,8 @@ class SharedData {
 private:
     string ClassifiedPath;
     string UnclassifiedPath;
-    int* k;
-    string* metric;
+    int k;
+    string metric;
     DataImport* ClassifiedData;
     DataImport* UnclassifiedData;
 public:
@@ -57,13 +57,19 @@ public:
     void SetUnclassifiedPath(string FilePath);
     string GetUnclassifiedPath();
 
-    int* GetK();
+    int GetK() const;
+    void SetK(int& NewK);
 
-    string* GetMetric();
+    string GetMetric() const;
+    void SetMetric(string& NewMetric);
+
+
+
 
     DataImport* GetClassifiedData();
     DataImport* GetUnclassifiedData();
-        
+
+
 };
 
 #endif //ADVANCEDPROGRAMMINGTASK4_SHAREDDATA_H
