@@ -120,6 +120,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             cout << respond;; // "Please upload your local train CSV file.\n"
             string path;
             cin >> path;
+            cout << "Path is: " << path;
             bool ValidFilePath = InCheck.ValidFilePath(path);
             cout << " bool ValidFilePath = " << ValidFilePath << endl;
             bool semek = true;
