@@ -17,11 +17,11 @@ LFLAGS	 = -lpthread
 
 all: server.out client.out
 
-server.out: $(OBJS0) $(LFLAGS)
-	$(CC) -g $(OBJS0) -o $(OUT0)
+server.out: $(OBJS0)
+	$(CC) -g $(OBJS0) -o $(OUT0) $(LFLAGS)
 
-client.out: $(OBJS1) $(LFLAGS)
-	$(CC) -g $(OBJS1) -o $(OUT1)
+client.out: $(OBJS1)
+	$(CC) -g $(OBJS1) -o $(OUT1) $(LFLAGS)
 
 DistanceCalc.o: DistanceCalc.cpp
 	$(CC) $(FLAGS) DistanceCalc.cpp -std=c11
