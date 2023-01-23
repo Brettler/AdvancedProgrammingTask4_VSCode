@@ -138,7 +138,7 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
     vector<double> vec;
     if (s.empty()){
         cerr << "Error: File contain Empty Vector." << endl;
-        exit(1);
+        //exit(1);
     }
     for (int i = 0; i < s.size(); i++) {
         try {
@@ -147,12 +147,30 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
         }
         catch (const invalid_argument& e) {
             cerr << "Error: File contain invalid data." << endl;
-            exit(1);
+            //exit(1);
         }
     }
     return vec;
 }
 
+// Convert a vector of strings into a vector of doubles.
+bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
+
+    vector<double> vec;
+    if (s.empty()){
+        return false;
+    }
+    for (int i = 0; i < s.size(); i++) {
+        try {
+            double feature = stod(s.at(i));
+            vec.push_back(feature);
+        }
+        catch (const invalid_argument& e) {
+            return false;
+        }
+    }
+    return true;
+}
 
 // Check if two vectors are of the same size.
 bool InputCheck::ValidVectorSizeCheck(const vector<double>& a, const vector<double>& b) const {
@@ -186,73 +204,74 @@ int InputCheck::ValidKNumber(const string& k) const{
 }
 
 // Check if the file exists and is not damaged.
-string InputCheck::FileName(string DataName) const {
+bool InputCheck::ValidFilePath(string DataName) {
+    cout << DataName << endl;
+    cout << " InputCheck::ValidFilePath(const string& DataName)" << endl;
     try {
         ifstream file(DataName);
 
         if (!file.good() || !file.is_open()) {
-            cerr << "Error: file does not exist or is damaged." << endl;
-            exit(1);
+            cout << "print in the if false" << endl;
+            return true;
         }
     }
     catch(exception& damaged_file) {
-        cerr << "Error: File is damaged." << endl;
-        exit(1);
+        cout << "print in the catch false" << endl;
+        return true;
     }
-
-    return DataName;
+    cout << " returing true ???? " << endl;
+    return false;
 }
 
 // Check if the file contains any white space characters.
 // StringVector is the row without the last element
-void InputCheck::WhitespacesFileCheck(const vector<string>& StringVector) const {
+bool InputCheck::WhitespacesFileCheck(const vector<string>& StringVector) const {
 
     if (StringVector.empty()) {
-        cerr << "Error: File contain Empty Vector." << endl;
-        exit(1);
+        //cerr << "Error: File contain Empty Vector." << endl;
+        return false;
     }
     for (int i = 0; i < StringVector.size(); i++) {
         const char *CharArray = StringVector[i].c_str();
         for (int i = 0; i < StringVector[i].size(); i++) {
             if (CharArray[i] == ' ') {
-                cerr << "Error: CSV file can't contain whitespaces." << endl;
-                exit(1);
+                //cerr << "Error: CSV file can't contain whitespaces." << endl;
+                return false;
             }
         }
         if (StringVector[i].empty()) {
-            cerr << "Error: CSV file can't contain empty rows." << endl;
-            exit(1);
+            //cerr << "Error: CSV file can't contain empty rows." << endl;
+            return false;
         }
     }
+    return true;
 }
 
 // Check if the label is not empty or only with whitespaces.
-void InputCheck::ValidLabel(const string& label) const {
+bool InputCheck::ValidLabel(const string& label) const {
 
     if (label.empty()) {
-        cerr << "Error: 404 label not found." << endl;
-        exit(1);
+        return false;
     }
 
     // find_first_not_of function searching in a string if there is any char that is not [" \t\n\v\f\r"],
     // If the function finds she will return the position of this char. Else she will return npos.
     // Meaning if npos returns our string is contains only whitespaces.
     if (label.find_first_not_of(" \t\n\v\f\r") == std::string::npos) {
-        cerr << "Error: Label contain only whitespaces or the line is empty." << endl;
-        exit(1);
+        return false;
     }
-    else {
-        return;
-    }
+    
+    return true;
 }
 
 // Check if the file is empty.
-void InputCheck::EmptyFileCheck(const map<vector<double>, string> &DataMap) const {
+bool InputCheck::EmptyFileCheck(const map<vector<double>, string> &DataMap) const {
 
     if (DataMap.empty()) {
-        cerr << "Error: The file is empty." << endl;
-        exit(1);
+        //cerr << "Error: The file is empty." << endl;
+        return false;
     }
+    return true;
 }
 
 // Check if a valid metric type was received.
