@@ -205,22 +205,16 @@ int InputCheck::ValidKNumber(const string& k) const{
 
 // Check if the file exists and is not damaged.
 bool InputCheck::ValidFilePath(string DataName) {
-    cout << DataName << endl;
-    cout << " InputCheck::ValidFilePath(const string& DataName)" << endl;
     try {
         ifstream file(DataName);
-
         if (!file.good() || !file.is_open()) {
-            cout << "print in the if false" << endl;
-            return true;
+            return false;
         }
     }
     catch(exception& damaged_file) {
-        cout << "print in the catch false" << endl;
-        return true;
+        return false;
     }
-    cout << " returing true ???? " << endl;
-    return false;
+    return true;
 }
 
 // Check if the file contains any white space characters.
@@ -228,19 +222,19 @@ bool InputCheck::ValidFilePath(string DataName) {
 bool InputCheck::WhitespacesFileCheck(const vector<string>& StringVector) const {
 
     if (StringVector.empty()) {
-        //cerr << "Error: File contain Empty Vector." << endl;
+        cerr << "Error: File contain Empty Vector." << endl;
         return false;
     }
     for (int i = 0; i < StringVector.size(); i++) {
         const char *CharArray = StringVector[i].c_str();
         for (int i = 0; i < StringVector[i].size(); i++) {
             if (CharArray[i] == ' ') {
-                //cerr << "Error: CSV file can't contain whitespaces." << endl;
+                cerr << "Error: CSV file can't contain whitespaces." << endl;
                 return false;
             }
         }
         if (StringVector[i].empty()) {
-            //cerr << "Error: CSV file can't contain empty rows." << endl;
+            cerr << "Error: CSV file can't contain empty rows." << endl;
             return false;
         }
     }

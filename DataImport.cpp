@@ -87,12 +87,13 @@ bool DataImport::ReadClassifiedData() {
     return true;
 }
 
-bool DataImport::ReadUnclassifiedData(){
-    
+bool DataImport::ReadUnclassifiedData(map<vector<double>, string> TrainMap){
     ifstream data(this->DataName);
     string row;
     InputCheck ic;
-    auto TrainSetVector = this -> DataMap.begin() -> first;
+    // Acess to the data map first vector. 
+    // This use is just after we processed the train file from the user.
+    vector<double> FirstVector = TrainMap.begin()->first;
 
     // Each line in the csv file will be inserted into 'row' as a string.
     while (getline(data, row))
@@ -108,22 +109,31 @@ bool DataImport::ReadUnclassifiedData(){
 
         // Check if the row contains any white space characters.
         if (!ic.WhitespacesFileCheck(sample)){
+            //cout << " return false because WhitespacesFileCheck\n";
             return false;
         }
 
         vector<double> SampleDouble;
 
         if (!ic.ValidStringToDouble(sample)){
+            //cout << " return false because ValidStringToDouble\n";
             return false;
         } else {
             // Convert the strings into doubles.
             SampleDouble = ic.StringToDouble(sample);
         }
 
+        for (int i = 0 ; i< FirstVector.size(); i++) {
+            cout << FirstVector.at(i) << " ";
+        }
+        cout << endl;
+        //cout << "TrainSetVector size is: " << FirstVector.size() << endl;
+
         // Compare the size of the first vector of the training set against all other vectors to make sure they're the same.
         // If they are all the same size, continue. Otherwise, terminate the program.
-        bool ValidVectorSize = ic.ValidVectorSizeCheck(TrainSetVector, SampleDouble);
+        bool ValidVectorSize = ic.ValidVectorSizeCheck(FirstVector, SampleDouble);
         if (!ValidVectorSize) {
+            //cout << " return false because ValidVectorSizeCheck\n";
             return false;
         }
 

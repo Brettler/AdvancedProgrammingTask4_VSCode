@@ -35,7 +35,7 @@ void CLI::start(){
         UserChoice = atoi(ClientRespond.c_str());
         //cout <<"Conver Success" << endl;
         if (count(ValidChoices.begin(), ValidChoices.end(), UserChoice) == 0) {
-            dio -> write("Invalid Choose.\n") ;
+            dio -> write("invalid input\n") ;
             continue;
         }
         if(UserChoice == 1){
