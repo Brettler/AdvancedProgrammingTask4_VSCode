@@ -42,17 +42,20 @@ bool ClientClass::InterfaceSendFile (string& path) {
 
     // We will add 'end-of-message' marker to know when we finished reading the messege
     Socket->write(TrainContent + "\n" + "//EOM_MARKER\n");
-    string response = Socket->read(); // upload complete
+    string response = Socket->read(); // the client will read: upload complete / invalid input
     cout << response << endl;
     if (response == "invalid input") {
         return false;
     }
-    response = Socket->read(); // "Please enter the path to the test file:
+    response = Socket->read(); // the client will read: "Please enter the path to the test file:
     cout << response << endl;
     string TestPath;
     cin >> TestPath;
-    if (!InCheck.ValidFilePath(TestPath)){
-        cout << "invalid input";
+    //cout << "Input user for test path is: " << TestPath << endl;
+    bool ValidFilePath = InCheck.ValidFilePath(TestPath);
+    //cout << "bool ValidFilePath = " << ValidFilePath << endl;
+    if (!ValidFilePath){
+        //cout << "returning false in: if (!InCheck.ValidFilePath(TestPath) \n ";
         return false;
     }
     // Read the contents of the file
@@ -61,84 +64,135 @@ bool ClientClass::InterfaceSendFile (string& path) {
     TestCSV.close();
     // Send the contents of the file to the server
     Socket->write(TestContent + "\n" + "//EOM_MARKER\n");
-    response = Socket->read();
-    cout << response << endl;
+    response = Socket->read(); // the client will read: upload complete / invalid input
     if (response == "invalid input") {
         return false;
+    } else {
+        cout << response << endl; // Upload Complete
     }
-    cout << response << endl; // Upload Complete
     return true;
 }
 
 
 
 
-void ClientClass::SendMessages(DefaultIO* ServerSocket) {
-    this -> Socket = ServerSocket;
-    ifstream in("input.txt");
-    string input;
-    string path;
-    while(input!="8"){
-        getline(in,input);
-        ServerSocket -> write(input);
-        if(input=="1"){
-            cin >> path;
-            InterfaceSendFile (path);
-            /*getline(in,input);
-            while(input!="done"){
-                getline(in,input);
-                ServerSocket -> write(input)*/;
-        }
-    }
-}
+// void ClientClass::SendMessages(DefaultIO* ServerSocket) {
+//     this -> Socket = ServerSocket;
+//     ifstream in("input.txt");
+//     string input;
+//     string path;
+//     while(input!="8"){
+//         getline(in,input);
+//         ServerSocket -> write(input);
+//         if(input=="1"){
+//             cin >> path;
+//             InterfaceSendFile (path);
+//             /*getline(in,input);
+//             while(input!="done"){
+//                 getline(in,input);
+//                 ServerSocket -> write(input)*/;
+//         }
+//     }
+// }
 //in.close();
 
 
 void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
     this -> Socket = ServerSocket;
     ofstream pr(OutputFile);
-    string input = "";
+    string input = "0";
+    string respond ="0";
     ifstream in("input.txt");
     while(input != "8"){
+  
+        //cout << "First line of the loop " << endl;
         //cout << "Client call PrintMenu()" << endl;
         PrintMenu();
+        //cout << "Check input before using getline: " << input << endl;
         //cout << "Finsish Reading Menu and now waiting for input from the user: " << endl;
-        getline(cin, input);
-        //cout << "Send input to the server " << input << endl;
+        //getline(cin, input);
+        cin >> input;
+        //cout << "Check input after doing complicated if: " << input << endl;
         Socket -> write(input+'\n');
-        //cout << "Reading response from the server " << endl;
-        string respond = Socket -> read();
-        // if the respond is invalid we want to print again the menu
-        if (respond == "invalid input") {
-            cout << respond;
-            continue;
-        }
+
         // Execute command uploadCSVV
         if (input == "1"){
+            
+            //cout << "Respond is: " << respond << endl;
+            respond = Socket -> read();
+            //cout << "Respond after socket reading is: " << respond << endl;
+            // if the respond is invalid we want to print again the menu
+            if (respond == "invalid input") {
+                cout << respond << endl;
+                continue;
+            }
             //cout << "We are in statement when input == 1 \n";
             //cout << "Reading response from the server " << endl;
-            cout << respond;; // "Please upload your local train CSV file.\n"
+            cout << respond; // "Please upload your local train CSV file.\n"
             string path;
             cin >> path;
             bool ValidFilePath = InCheck.ValidFilePath(path);
-            cout << " bool ValidFilePath = " << ValidFilePath << endl;
-            bool semek = true;
-            if (semek)
-            {
-                cout << "invalid input";
+            //cout << " bool ValidFilePath = " << ValidFilePath << endl;
+            if (!ValidFilePath) {
+                // Send to the server to go back the the menu;
+                Socket -> write("invalid input\n");
+                cout << "invalid input\n";
                 continue;
-            } 
-            else
-            {
-                cout << "joining the else???? " << endl;
-                if (!InterfaceSendFile(path)){
-                    cout <<" Joining if into else???\n";
-                    continue;
-                }  
             }
-            cout << "Im a mother fucker didnt join the if statement and the ele statemnt\n";
+            bool ValidFilesContent = InterfaceSendFile(path);
+            //cout << "InterfaceSendFile is = " << ValidFilesContent << endl;;
+            if (!ValidFilesContent) {
+                Socket -> write("invalid input\n");
+                cout << "invalid input\n";
+                continue;
+            }
+        }
+        if (input == "2") {
+            string UserSettingInput ="0";   
+            string UserMetric = "0"; 
+            string UserK = "0";
+            // Read corrent k from the user.
+            string CorrentK = Socket -> read();
+            cout << CorrentK << endl;
+            // Read corrent mertic from the user.
+            string CorrentMetric = Socket -> read();
+            cout << CorrentMetric << endl;
+            cout << "The current KNN parameters are: K = " << CorrentK << ", distance metric = " << CorrentMetric << endl;
+            cin.ignore();
+            getline(cin, UserSettingInput);
+            cout << "UserSettingInput is: " << UserSettingInput << endl;
+            istringstream is(UserSettingInput);
+            is >> UserK;
+            cout << "UserK = " << UserK << endl;
+            is >> UserMetric;
+            cout << "UserMetric = " << UserMetric << endl;
+            // if (UserSettingInput == "0" || UserMetric == "0" || UserK =="0") {
+            //     // Send the server that he need to go back to CLI to send the client the menu
+            //     cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+            //     Socket -> write(UserK+ " " + UserMetric+'\n');
+            //     continue;            
+            // } else {
+            //     // Send the server the setting the user wants; "<K> <metric>"
+            //     Socket -> write(UserK+ " " +UserMetric+'\n');        
+            // }
+            // // Send the server the setting the user wants; "<K> <metric>"
+            Socket -> write(UserK+ " " +UserMetric+'\n');
+            // Catch errors from the server.
+            // Catch if both of the arguments are invalid
+            string ServerCheck = Socket -> read();
+            if (ServerCheck == "invalid_k_metric"){
+                cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+            }
+            else if (ServerCheck == "invalid_k"){
+                cout << "invalid value for K" << endl;
+            }
+            else if (ServerCheck == "invalid_metric"){
+                cout << "invalid value for metric" << endl;
+            }
+            continue;
         }
     }
+
     pr.close();
 }
 
@@ -149,7 +203,7 @@ void ClientClass::PrintMenu(){
     while(!FlagFinishReading){
         // read string line
         string RowInMenu = Socket -> read();
-        cout << RowInMenu<<endl;
+        cout << RowInMenu << endl;
         if(RowInMenu == "8.exit")
             FlagFinishReading = true;
     }

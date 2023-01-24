@@ -24,10 +24,15 @@ bool CommandUploadCSV::UploadFile(string FileCSV, string UploadMessage){
     string row = "0";
     while (!FlagEOM) {
         row = dio -> read();
+        cout << "Row is = " << row << endl;
+        if (row == "invalid input") {
+            //cout << "Return false because of row is invalid" << endl;
+            return false;
+        }
         cout << "Row is: " << row << endl;
         if (row == "//EOM_MARKER") {
             FlagEOM = true;
-            cout << "we need to delete the last empty row\n";
+            //cout << "we need to delete the last empty row\n";
             ServerDataFile.close();
             // reading the content of the file to ifs object 
             ifstream ifs(FileCSV);
@@ -68,6 +73,8 @@ bool CommandUploadCSV::UploadFile(string FileCSV, string UploadMessage){
     // dio -> write("Upload complete.\n");
     // //ServerDataFile.close();
     // return true;
+
+    return true;
 }
 
 
@@ -79,9 +86,12 @@ void CommandUploadCSV::execute(SharedData* shared) {
 
     string TestCSV = "UnclassifiedFileServer.csv";
     string UploadTest = "Please upload your local test CSV file.\n ";
- 
+    
     // Training set proccess:
-    UploadFile(TrainCSV, UploadTrain);
+    bool ValidPathTrain = UploadFile(TrainCSV, UploadTrain);
+    if (!ValidPathTrain) {
+        return;
+    }
 
     shared -> SetClassifiedPath(TrainCSV);
 
@@ -90,18 +100,26 @@ void CommandUploadCSV::execute(SharedData* shared) {
     if (!ValidUploadClassified){
         dio -> write("invalid input\n");
         return;
+    } else {
+        dio -> write("Upload complete.\n");
     }
 
     // Test set proccess:
-    UploadFile(TestCSV, UploadTest);
+     bool ValidPathTest = UploadFile(TestCSV, UploadTest);
+    if (!ValidPathTest) {
+        return;
+    }
 
     shared -> SetUnclassifiedPath(TestCSV);
-
-    bool ValidUploadUnclassified = shared -> GetUnclassifiedData() -> ReadUnclassifiedData();
-
+    
+    bool ValidUploadUnclassified = shared -> GetUnclassifiedData() -> ReadUnclassifiedData(shared ->GetClassifiedData() -> GetDataMap());
+    //cout << "ValidUploadUnclassified state is = " << ValidUploadUnclassified << endl;
     if (!ValidUploadUnclassified){
+        //cout << "We are in the if of :   if (!ValidUploadUnclassified) \n";
         dio -> write("invalid input\n");
         return;
+    } else {
+        dio -> write("Upload complete.\n");
     }
 }
 

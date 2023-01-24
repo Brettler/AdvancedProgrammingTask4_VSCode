@@ -38,6 +38,15 @@ public:
     bool UploadFile(string FileCSV, string UploadMessage);
 };
 
+class CommandSettingsKNN : public Command {
+public:
+    explicit CommandSettingsKNN(DefaultIO* dio, SharedData* shared);
+    ~CommandSettingsKNN();
+    void execute(SharedData* shared) override;
+    string GetDescription() override;
+};
+
+
 class CommandExit : public Command {
 public:
     explicit CommandExit(DefaultIO* dio, SharedData* shared);
@@ -45,8 +54,6 @@ public:
     void execute(SharedData* shared) override;
     string GetDescription() override;
 };
-
-
 
 
 

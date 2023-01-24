@@ -10,8 +10,12 @@ CLI::CLI(DefaultIO* dio) {
     this -> CommandCSV = new CommandUploadCSV(dio, shared);
     CommandsVec.push_back(CommandCSV);
 
+    this -> CommandSettings = new CommandSettingsKNN(dio, shared);
+    CommandsVec.push_back(CommandSettings);
+
     this -> CommandKill = new CommandExit(dio, shared);
     CommandsVec.push_back(CommandKill);
+
     //commands.push_back(new Settings(dio));
     //commands.push_back(new Detect(dio));
     //commands.push_back(new Results(dio));
@@ -32,10 +36,14 @@ void CLI::start(){
         string ClientRespond = dio -> read();
         //cout << "User Choise is: " << ClientRespond << endl;
         //cout << "Now trying to conver choise to an int" << endl;
+        // *************************************************************
+        // need to check what hppaned if the respond is not an int!!
+        // For example when the input : 4 MAN (it will think we want 4)
+        // *************************************************************
         UserChoice = atoi(ClientRespond.c_str());
         //cout <<"Conver Success" << endl;
         if (count(ValidChoices.begin(), ValidChoices.end(), UserChoice) == 0) {
-            dio -> write("Invalid Choose.\n") ;
+            dio -> write("invalid input\n") ;
             continue;
         }
         if(UserChoice == 1){
@@ -43,6 +51,10 @@ void CLI::start(){
         }
         if(UserChoice == 2){
             CommandsVec.at(1) -> execute(this -> shared);
+        }
+        // Exit command should be the last element in the vector;
+        if(UserChoice == 8){
+            CommandsVec.at(2) -> execute(this -> shared);
         }
         
 

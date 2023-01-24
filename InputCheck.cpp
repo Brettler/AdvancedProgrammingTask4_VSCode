@@ -30,7 +30,7 @@ bool InputCheck::ValidDoubleVector(const string& input) const {
 
 // Validate the user input received in the client.
 bool InputCheck::ValidClientMessage(const string& StringInput) const {
-    vector<double> DoubleVec;
+    //vector<double> DoubleVec;
     string TempStringInput = StringInput;
     string metric;
     string KString;
@@ -38,28 +38,32 @@ bool InputCheck::ValidClientMessage(const string& StringInput) const {
     istringstream is(TempStringInput);
 
     // Read the vector values.
-    while (is >> TempStringInput) {
-        try {
-            // If the conversion from string to double using 'stod' is successful, we will perform additional checks to
-            // catch edge cases such as "12abc", which 'stod' will convert without an issue, but is an invalid value.
-            stod(TempStringInput);
-            bool FlagValidChars = ValidDoubleVector(TempStringInput);
-            if (!FlagValidChars) {
-                // If the input is not a valid number, it must be a distance measurement.
-                metric = TempStringInput;
-                break;
-            }
-        }
-        catch (exception& invalid_value) {
-            // If the input is not a valid number, it must be a distance measurement.
-            metric = TempStringInput;
-            break;
-        }
-    }
+    // while (is >> TempStringInput) {
+    //     try {
+    //         // If the conversion from string to double using 'stod' is successful, we will perform additional checks to
+    //         // catch edge cases such as "12abc", which 'stod' will convert without an issue, but is an invalid value.
+    //         stod(TempStringInput);
+    //         bool FlagValidChars = ValidDoubleVector(TempStringInput);
+    //         if (!FlagValidChars) {
+    //             // If the input is not a valid number, it must be a distance measurement.
+    //             metric = TempStringInput;
+    //             break;
+    //         }
+    //     }
+    //     catch (exception& invalid_value) {
+    //         // If the input is not a valid number, it must be a distance measurement.
+    //         metric = TempStringInput;
+    //         break;
+    //     }
+    // }
 
-    // Read and validate the k value.
     is >> KString;
     int k = ValidKNumber(KString);
+
+    is >> metric;
+    //metric = TempStringInput;
+    // Read and validate the k value.
+    
 
     // Validate the metric.
     if (!ValidDistanceMetric(metric) || k == -1) {
@@ -205,22 +209,16 @@ int InputCheck::ValidKNumber(const string& k) const{
 
 // Check if the file exists and is not damaged.
 bool InputCheck::ValidFilePath(string DataName) {
-    cout << DataName << endl;
-    cout << " InputCheck::ValidFilePath(const string& DataName)" << endl;
     try {
         ifstream file(DataName);
-
         if (!file.good() || !file.is_open()) {
-            cout << "print in the if false" << endl;
-            return true;
+            return false;
         }
     }
     catch(exception& damaged_file) {
-        cout << "print in the catch false" << endl;
-        return true;
+        return false;
     }
-    cout << " returing true ???? " << endl;
-    return false;
+    return true;
 }
 
 // Check if the file contains any white space characters.
@@ -228,19 +226,19 @@ bool InputCheck::ValidFilePath(string DataName) {
 bool InputCheck::WhitespacesFileCheck(const vector<string>& StringVector) const {
 
     if (StringVector.empty()) {
-        //cerr << "Error: File contain Empty Vector." << endl;
+        cerr << "Error: File contain Empty Vector." << endl;
         return false;
     }
     for (int i = 0; i < StringVector.size(); i++) {
         const char *CharArray = StringVector[i].c_str();
         for (int i = 0; i < StringVector[i].size(); i++) {
             if (CharArray[i] == ' ') {
-                //cerr << "Error: CSV file can't contain whitespaces." << endl;
+                cerr << "Error: CSV file can't contain whitespaces." << endl;
                 return false;
             }
         }
         if (StringVector[i].empty()) {
-            //cerr << "Error: CSV file can't contain empty rows." << endl;
+            cerr << "Error: CSV file can't contain empty rows." << endl;
             return false;
         }
     }
