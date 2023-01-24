@@ -6,6 +6,7 @@
 SharedData::SharedData() {
     k = 5;
     metric = "AUC";
+    ResultsVector = new vector<string>;
     ClassifiedData = nullptr;
     UnclassifiedData = nullptr;
 }
@@ -56,6 +57,22 @@ string SharedData::GetMetric() const{
 void SharedData::SetMetric(string& NewMetric) {
     this -> metric = NewMetric;
 }
+
+vector<string>* SharedData::GetResultsVector() const {
+    return this -> ResultsVector;
+}
+
+void SharedData::SetResultsVector(string& label){
+    this -> ResultsVector -> push_back(label);
+}
+
+ofstream* SharedData::GetResultsFile() const {
+    return this -> ResultsFile;
+}
+void SharedData::SetResultsFile(string& NameFile){
+   this-> ResultsFile = new ofstream(NameFile);
+}
+
 
 
 

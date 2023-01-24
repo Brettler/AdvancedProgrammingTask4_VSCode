@@ -16,9 +16,13 @@ CLI::CLI(DefaultIO* dio) {
     this -> CommandRunKNN = new CommandClassify(dio, shared);
     CommandsVec.push_back(CommandRunKNN);
 
+    this -> CommandDisRes = new CommandDisplay(dio, shared);
+    CommandsVec.push_back(CommandDisRes);
+
     this -> CommandKill = new CommandExit(dio, shared);
     CommandsVec.push_back(CommandKill);
 
+    
     //commands.push_back(new Settings(dio));
     //commands.push_back(new Detect(dio));
     //commands.push_back(new Results(dio));
@@ -54,6 +58,12 @@ void CLI::start(){
         }
         if(UserChoice == 2){
             CommandsVec.at(1) -> execute(this -> shared);
+        }
+        if(UserChoice == 3){
+            CommandsVec.at(2) -> execute(this -> shared);
+        }
+        if(UserChoice == 4){
+            CommandsVec.at(3) -> execute(this -> shared);
         }
         // Exit command should be the last element in the vector;
         if(UserChoice == 8){
