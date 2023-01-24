@@ -15,13 +15,11 @@
 using namespace std;
 
 class DataImport {
-private:
+public:
     string DataName;
     ifstream file;
     map<vector<double>, string> DataMap;
-    vector<vector<double>> UnclassifiedData;
-
-public:
+    vector<vector<double>> UnclassifiedVectors;
     // Constructor & Destructor:
     explicit DataImport(const string& DataName);
     ~DataImport();

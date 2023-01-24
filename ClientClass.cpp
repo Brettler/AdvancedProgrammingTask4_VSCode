@@ -191,6 +191,11 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             }
             continue;
         }
+        if (input == "3") {
+            // Reading from the server if the clasifying was successfull complete or not
+            string done = Socket -> read();
+            cout << done << endl;
+        }
     }
 
     pr.close();

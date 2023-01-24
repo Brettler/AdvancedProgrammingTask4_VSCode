@@ -55,6 +55,9 @@ void CLI::start(){
         if(UserChoice == 2){
             CommandsVec.at(1) -> execute(this -> shared);
         }
+        if(UserChoice == 3){
+            CommandsVec.at(2) -> execute(this -> shared);
+        }
         // Exit command should be the last element in the vector;
         if(UserChoice == 8){
             CommandsVec.at(2) -> execute(this -> shared);
