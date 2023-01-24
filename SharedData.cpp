@@ -24,6 +24,9 @@ SharedData::~SharedData() {
     if (UnclassifiedData != nullptr) {
         delete UnclassifiedData;
     }
+
+    delete UnclassifiedData;
+    
 }
 
 void SharedData::SetClassifiedPath(string FileClassifiePath) {
@@ -65,16 +68,6 @@ vector<string>* SharedData::GetResultsVector() const {
 void SharedData::SetResultsVector(string& label){
     this -> ResultsVector -> push_back(label);
 }
-
-ofstream* SharedData::GetResultsFile() const {
-    return this -> ResultsFile;
-}
-void SharedData::SetResultsFile(string& NameFile){
-   this-> ResultsFile = new ofstream(NameFile);
-}
-
-
-
 
 DataImport* SharedData::GetClassifiedData() {
     if (ClassifiedData == nullptr) {

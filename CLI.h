@@ -30,6 +30,7 @@ class CLI {
     CommandSettingsKNN* CommandSettings;
     CommandClassify* CommandRunKNN;
     CommandDisplay* CommandDisRes;
+    CommandDownload* CommandDownRes;
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:
