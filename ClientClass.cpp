@@ -196,6 +196,26 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             string done = Socket -> read();
             cout << done << endl;
         }
+        if (input == "3") {
+            // Reading from the server if the clasifying was successfull complete or not
+            string done = Socket -> read();
+            cout << done << endl;
+        }
+        if (input == "4") {
+            string label = Socket -> read();
+            if (label == "please classify the data" || label == "please upload data") {
+                cout << label << endl;
+                continue;
+            } else {
+                cout << label << endl;
+            }
+            
+            // Printing for the user the index and label. 
+            while (label != "Done.") {
+                label = Socket -> read();      
+                cout << label << endl;
+            }
+        }
     }
 
     pr.close();
@@ -209,7 +229,7 @@ void ClientClass::PrintMenu(){
         // read string line
         string RowInMenu = Socket -> read();
         cout << RowInMenu << endl;
-        if(RowInMenu == "8.exit")
+        if(RowInMenu == "8. exit")
             FlagFinishReading = true;
     }
 

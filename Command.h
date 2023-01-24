@@ -55,10 +55,10 @@ public:
     string GetDescription() override;
 };
 
-class CommandClassify : public Command {
+class CommandDisplay : public Command {
 public:
-    explicit CommandClassify(DefaultIO* dio, SharedData* shared);
-    ~CommandClassify();
+    explicit CommandDisplay(DefaultIO* dio, SharedData* shared);
+    ~CommandDisplay();
     void execute(SharedData* shared) override;
     string GetDescription() override;
 };
