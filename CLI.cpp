@@ -13,6 +13,9 @@ CLI::CLI(DefaultIO* dio) {
     this -> CommandSettings = new CommandSettingsKNN(dio, shared);
     CommandsVec.push_back(CommandSettings);
 
+    this -> CommandRunKNN = new CommandClassify(dio, shared);
+    CommandsVec.push_back(CommandRunKNN);
+
     this -> CommandKill = new CommandExit(dio, shared);
     CommandsVec.push_back(CommandKill);
 

@@ -28,6 +28,7 @@ class CLI {
     SharedData* shared;
     CommandUploadCSV* CommandCSV;
     CommandSettingsKNN* CommandSettings;
+    CommandClassify* CommandRunKNN;
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:

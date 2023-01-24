@@ -46,6 +46,13 @@ public:
     string GetDescription() override;
 };
 
+class CommandClassify : public Command {
+public:
+    explicit CommandClassify(DefaultIO* dio, SharedData* shared);
+    ~CommandClassify();
+    void execute(SharedData* shared) override;
+    string GetDescription() override;
+};
 
 class CommandExit : public Command {
 public:
