@@ -5,7 +5,7 @@
 
 CommandExit::CommandExit(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared){
-    this -> description = "8.exit\n";
+    this -> description = "8. exit\n";
 }
 CommandExit::~CommandExit(){}
 

@@ -137,7 +137,7 @@ bool DataImport::ReadUnclassifiedData(map<vector<double>, string> TrainMap){
             return false;
         }
 
-        this -> UnclassifiedData.push_back(SampleDouble);
+        this -> UnclassifiedVectors.push_back(SampleDouble);
     }
     return true;
 }

@@ -46,6 +46,8 @@ private:
     string metric;
     DataImport* ClassifiedData;
     DataImport* UnclassifiedData;
+    vector<string>* ResultsVector;
+    ofstream* ResultsFile;
 public:
     SharedData();
 
@@ -63,7 +65,11 @@ public:
     string GetMetric() const;
     void SetMetric(string& NewMetric);
 
+    vector<string>* GetResultsVector() const;
+    void SetResultsVector(string& label);
 
+    ofstream* GetResultsFile() const;
+    void SetResultsFile(string& NameFile);
 
 
     DataImport* GetClassifiedData();

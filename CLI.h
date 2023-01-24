@@ -28,6 +28,8 @@ class CLI {
     SharedData* shared;
     CommandUploadCSV* CommandCSV;
     CommandSettingsKNN* CommandSettings;
+    CommandClassify* CommandRunKNN;
+    CommandDisplay* CommandDisRes;
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:

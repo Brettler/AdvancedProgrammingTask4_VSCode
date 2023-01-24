@@ -12,6 +12,7 @@
 #include "DefaultIO.h"
 #include "SharedData.h"
 #include "DataImport.h"
+#include "KNN.h"
 using namespace std;
 
 
@@ -46,6 +47,21 @@ public:
     string GetDescription() override;
 };
 
+class CommandClassify : public Command {
+public:
+    explicit CommandClassify(DefaultIO* dio, SharedData* shared);
+    ~CommandClassify();
+    void execute(SharedData* shared) override;
+    string GetDescription() override;
+};
+
+class CommandDisplay : public Command {
+public:
+    explicit CommandDisplay(DefaultIO* dio, SharedData* shared);
+    ~CommandDisplay();
+    void execute(SharedData* shared) override;
+    string GetDescription() override;
+};
 
 class CommandExit : public Command {
 public:
