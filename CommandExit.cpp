@@ -9,7 +9,9 @@ CommandExit::CommandExit(DefaultIO* dio, SharedData* shared)
 }
 CommandExit::~CommandExit(){}
 
-void CommandExit::execute(SharedData* shared) {}
+void CommandExit::execute(SharedData* shared) {
+    return;
+}
 
 string CommandExit::GetDescription() {
     return this->description;
