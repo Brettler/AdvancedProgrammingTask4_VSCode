@@ -1,7 +1,7 @@
 # AdvancedProgrammingTask4_VSCode
 Eden Berman &amp; Liad Brettler
 
-# Description:---
+# Description:
 In this program, we created a server and a client that communicate using a Command Line Interface (CLI). The program utilizes the Command design pattern, which separates actions from the object itself by encapsulating them in separate command objects, providing greater flexibility in managing and controlling actions. Multiple clients can connect to the server simultaneously, each through a separate socket, and submit requests to execute the KNN classification algorithm. Once connected, the client is presented with a menu of options including the following:
 1. Uploading classified and unclassified CSV files for train and test sets respectively.
 2. Configuring K value and distance metric for the KNN algorithm settings.
@@ -9,6 +9,7 @@ In this program, we created a server and a client that communicate using a Comma
 4. Displaying classification results.
 5. Downloading classification results locally.
 8. Exiting the program.
+
 Each action is implemented using an execution method in the CLI, verification methods in both the server and client, and socket-based input/output communication. The server remains active and listens continuously for new client connections, and as long as a client is connected, the server will process requests.
 
 # Compile & Run Instructions:---
@@ -70,6 +71,8 @@ _Warning:_ This program only supports CSV files. The presence of any whitespace 
 * CommandDisplay - This command class presents the user with the results of data classification performed by the KNN algorithm. This displayed in the format of 'index number' 'label' on separate rows for each classification result. Finally, the message "done" will be displayed on a separate line. If data files have not been uploaded prior, the server will display the message "please upload data". If the data has not yet been classified, the server will display the message "please classify the data". The welcome menu will be displayed once again after this.
 
 * CommandDownload - This command class enables the user to download a file locally containing the classification results, presented in the format of 'index number' 'label' on separate rows for each classification result. The user inputs a path to the desired location to download the file and the server sends the necessary information to the client to create the file. If data files have not been uploaded prior, the server will display the message "please upload data". If the data has not yet been classified, the server will display the message "please classify the data". The welcome menu will be displayed immediately, regardless of whether the file download has completed or not.
+
+  Note: The server automatically names the results file as 'ResultsFile_X_Y.csv' and prompts the user to specify the desired file path for the download, but does not           allow the user to name the file prior to downloading.
 
 * CommandExit - This command class allows the user to terminate the connection with the server.
 
