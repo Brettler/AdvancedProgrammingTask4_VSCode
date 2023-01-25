@@ -38,9 +38,10 @@ public:
     // Functions:
     int run();
     void SendMessages(DefaultIO* ServerSocket);
-    void ReceiveMessages(DefaultIO* ServerSocket,string outputFile);
+    void ReceiveMessages(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
+    void  DownloadFile();
     //void ClientInteraction(int ServerSocket, string output);
 };
 

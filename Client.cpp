@@ -24,14 +24,13 @@ int main(int argc, char* argv[]) {
     string Menu = "Server_Menu";
     //client.ClientInteraction(SocketNumber, Menu);
     SocketIO ServerSocketIO(SocketNumber);
-    string OutputFile ="output";
     // Using functor to initialize the thread.
     // Functor taking object and the variables of this object and send it to the Thread constructor.
     //thread SendThread([&client, &ServerSocketIO]()
     //                    { client.SendMessages(&ServerSocketIO); });
     //thread ReceiveThread(client.ReceiveMessages, SocketNumber, outputFile);
-    thread ReceiveThread([&client, &ServerSocketIO, OutputFile]()
-                        { client.ReceiveMessages(&ServerSocketIO, OutputFile); });
+    thread ReceiveThread([&client, &ServerSocketIO]()
+                        { client.ReceiveMessages(&ServerSocketIO); });
     //SendThread.join();
     ReceiveThread.join();
     close(SocketNumber);
