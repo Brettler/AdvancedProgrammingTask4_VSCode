@@ -1,12 +1,12 @@
 # AdvancedProgrammingTask4_VSCode
 Eden Berman &amp; Liad Brettler
 
-# Description:
+# Description:---
 In this program, we created a server and client and established a connection between them. The client sends the server an unclassified vector received from the user, and the server runs the KNN algorithm on the vector and returns the result to the client to be displayed to the user. The client runs in an infinite loop, waiting for the next user input. The user can close the client by typing '-1', which will close the connection to the server and then shut down the program. However, the server remains active and listens for the next client to request a connection. As long as a client is connected to the server, the server will listen for new requests.
 
 The server is provided with a database in the form of a CSV file. To calculate the distances between the sample and the entire database, the KNN algorithm will use one of the distance metrics implemented in Task 1: Euclidean, Manhattan, Chebyshev, Canberra, or Minkowski.
 
-# Compile & Run Instructions:
+# Compile & Run Instructions:---
 Run the following commands:
 * git init
 * git clone https://github.com/Brettler/AdvancedProgrammingTask3.git
@@ -26,7 +26,7 @@ Note: the 'port' value must be the same for the server and client.
 
 Next, the user may input the information for the sample they wish to classify: 'vector' 'distance_metric' 'k_value'. The program will then display the classification of the sample, or an error message if an invalid input was received. The user may continue to input new samples as described above, or terminate the program by typing '-1'.
 
-# Invalid Input:
+# Invalid Input:---
 This program processes a CSV file containing classified samples. Each row represents a single sample, with all columns containing 'double' values except for the last column, which should contain the classification name.
 
 If the program encounters invalid inputs during the initialization of the server or the client, it will terminate. If it receives invalid inputs from the user or the file, it will display an error message. Invalid inputs include an empty or corrupted file, an incorrect file path, a file with whitespace characters between vector values, and values that cannot be converted to the appropriate data type ('double', 'int', etc).
