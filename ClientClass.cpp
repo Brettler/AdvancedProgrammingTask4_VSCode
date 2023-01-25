@@ -13,6 +13,7 @@ int ClientClass::run() {
 
     // Initialize the socket.
     int sock = socket(AF_INET, SOCK_STREAM, 0);
+    cout << "Sock numer is: " << sock << endl;
     if (sock < 0) {
         perror("error creating socket");
         exit(1);
@@ -30,18 +31,29 @@ int ClientClass::run() {
         perror("error connecting to server");
         exit(1);
     }
+    this -> SocketNum = sock;
     return sock;
 }
 
 
 bool ClientClass::InterfaceSendFile (string& path) {
-
+    string row;
     ifstream FileCSV(path);
-    string TrainContent((istreambuf_iterator<char>(FileCSV)), istreambuf_iterator<char>());
-    FileCSV.close();
+    // string TrainContent((istreambuf_iterator<char>(FileCSV)), istreambuf_iterator<char>());
+    // FileCSV.close();
+    while (getline(FileCSV, row)){
+        Socket->write(row + "\n");
+
+    }
+
+    Socket->write("//EOM_MARKER\n");
 
     // We will add 'end-of-message' marker to know when we finished reading the messege
-    Socket->write(TrainContent + "\n" + "//EOM_MARKER\n");
+    //Socket->write(TrainContent + "\n" + "//EOM_MARKER\n");
+    FileCSV.close();
+
+
+
     string response = Socket->read(); // the client will read: upload complete / invalid input
     cout << response << endl;
     if (response == "invalid input") {
@@ -55,15 +67,25 @@ bool ClientClass::InterfaceSendFile (string& path) {
     bool ValidFilePath = InCheck.ValidFilePath(TestPath);
     //cout << "bool ValidFilePath = " << ValidFilePath << endl;
     if (!ValidFilePath){
-        //cout << "returning false in: if (!InCheck.ValidFilePath(TestPath) \n ";
         return false;
     }
     // Read the contents of the file
     ifstream TestCSV(TestPath);
-    string TestContent((istreambuf_iterator<char>(TestCSV)), istreambuf_iterator<char>());
+    //string TestContent((istreambuf_iterator<char>(TestCSV)), istreambuf_iterator<char>());
+    //TestCSV.close();
+    while (getline(TestCSV, row)){
+        Socket->write(row + "\n");
+
+    }
+
+    Socket->write("//EOM_MARKER\n");
+
     TestCSV.close();
+
     // Send the contents of the file to the server
-    Socket->write(TestContent + "\n" + "//EOM_MARKER\n");
+    //Socket->write(TestContent + "\n" + "//EOM_MARKER\n");
+
+
     response = Socket->read(); // the client will read: upload complete / invalid input
     if (response == "invalid input") {
         return false;
@@ -126,9 +148,8 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
                 cout << respond << endl;
                 continue;
             }
-            //cout << "We are in statement when input == 1 \n";
-            //cout << "Reading response from the server " << endl;
-            cout << respond; // "Please upload your local train CSV file.\n"
+            // "Please upload your local train CSV file.\n"
+            cout << respond; 
             string path;
             cin >> path;
             bool ValidFilePath = InCheck.ValidFilePath(path);
@@ -196,11 +217,6 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             string done = Socket -> read();
             cout << done << endl;
         }
-        if (input == "3") {
-            // Reading from the server if the clasifying was successfull complete or not
-            string done = Socket -> read();
-            cout << done << endl;
-        }
         if (input == "4") {
             string label = Socket -> read();
             if (label == "please classify the data" || label == "please upload data") {
@@ -217,7 +233,6 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
             }
         }
         if (input == "5") {
-            
             string row;
             string StatusReport = Socket -> read();
             if (StatusReport == "please classify the data" || StatusReport == "please upload data") {
@@ -227,10 +242,13 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
                 InputCheck ic;
                 // Getting path from the user
                 string PathDownload;
-                cin >> PathDownload;
-                ofstream ResultsFile(PathDownload + "/ResultsFile.csv");
+                cin >> PathDownload; 
+                string FullPath = PathDownload + "/ResultsFile_" +to_string(this-> SocketNum) + "_" + to_string(counter) +".csv";
+                
+                cout << "Full path is: " << FullPath << endl;
+                ofstream ResultsFile(FullPath, ios::out | ios::trunc);
                 // Check if valid path given
-                bool ValidPath = ic.ValidFilePath(PathDownload + "/ResultsFile.csv");
+                bool ValidPath = ic.ValidFilePath(FullPath);
                 if (!ValidPath) {
                     cout << "invalid input\n";
                     Socket -> write("err_exp\n");
@@ -242,10 +260,15 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
                 // Printing for the user the index and label.
                 row = Socket -> read(); 
                 do {
-                    ResultsFile << row << '\n';
-                    row = Socket -> read();     
+                    ResultsFile << row << endl;
+                    row = Socket -> read();
+                    // We clean the whitspace in the last row
+                    if (row == "Done.") {
+                        // need to handl last line as a whitespaces;
+                    }
                 } while(row != "Done.");
-                ResultsFile.close();
+                //ResultsFile.close();
+                this -> counter++;
             }
         }
     }
@@ -266,115 +289,3 @@ void ClientClass::PrintMenu(){
     }
 
 }
-
-
-
-
-/*void ClientClass::ClientInteraction(int ServerSocket, string OutputFile) {
-    ofstream out(OutputFile);
-    ifstream in("input.csv");
-    string input = "";
-    while (input != "6") {
-        readMenue(out, ServerSocket);
-        getline(in, input);
-        writeStr(input, ServerSocket);
-        if (input == "1") {
-            out << readStr(ServerSocket) << endl; // please upload...
-            while (input != "done") {
-                getline(in, input);
-                writeStr(input, ServerSocket);
-            }
-            out << readStr(ServerSocket) << endl; // Upload complete
-            out << readStr(ServerSocket) << endl; // please upload...
-            input = "";
-            while (input != "done") {
-                getline(in, input);
-                writeStr(input, ServerSocket);
-            }
-            out << readStr(ServerSocket) << endl; // Upload complete
-        }
-    }
-}*/
-/*        if(input=="3"){
-            out<<readStr(serverFD)<<endl; // Anomaly... complete
-        }
-        if(input=="5"){
-            out<<readStr(serverFD)<<endl; // please upload...
-            while(input!="done"){
-                getline(in,input);
-                writeStr(input,serverFD);
-            }
-            out<<readStr(serverFD)<<endl; // Upload complete
-            out<<readStr(serverFD)<<endl; // TPR
-            out<<readStr(serverFD)<<endl; // FPR
-        }
-    }
-    in.close();
-    out.close();
-
-    close(serverFD);
-    cout<<"end of client 2"<<endl;
-
-}*/
-
-/*    // ******************************************************************************
-    // Continuously request input vectors to send to the server, until the input '-1' is received.
-    InputCheck InCheck;
-    while (true) {
-        // Receives user input: "vector distance k".
-        string UserInput;
-        UserInput.clear();
-
-        // If the user input is -1, close the connection and exit the program.
-        getline(cin, UserInput);
-        if(UserInput == "-1") {
-            // Close socket
-            close(sock);
-            exit(1);
-        }
-
-        // If the message is invalid, print an 'invalid input' message to the user and prompt them for another input.
-        bool ValidMessage = InCheck.ValidClientMessage(UserInput);
-        if (!ValidMessage){
-            cerr <<"invalid input" << endl;
-            continue;
-        }
-
-        // Converts the message string into a pointer to an array of characters.
-        int DataLen = UserInput.size();
-        const char* message = UserInput.c_str();
-
-        // If the number of bytes sent is less than zero, it means that the send function was unable to send the
-        // message and an error has occurred.
-        int SentBytes = send(sock, message, DataLen, 0);
-        if (SentBytes < 0) {
-            cerr << "Error: We encountered an error while trying to send your message, please try again later. ";
-            close(sock);
-            exit(1);
-        }
-
-        // Receive a response from the server and clear the contents of the buffer.
-        char buffer[4096];
-        memset(buffer, 0, sizeof(buffer));
-        int ExpectedDataLen = sizeof(buffer);
-        int ReadBytes = recv(sock, buffer, ExpectedDataLen, 0);
-
-        // If the number of bytes received is zero, close the connection with the server.
-        if (ReadBytes == 0) {
-            cerr << "Connection with the server closed ";
-            close(sock);
-            exit(0);
-        }
-
-            // If the number of bytes received is a negative number, than an error occurred while reading the response.
-        else if (ReadBytes < 0) {
-            cerr << "Error: An error occurred while reading the response from the server. Please try again later.";
-            close(sock);
-            exit(1);
-        }
-            // Print the message received from the server.
-        else {
-            cout << buffer << endl;
-        }
-    }*/
-    // ******************************************************************************

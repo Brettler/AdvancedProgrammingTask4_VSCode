@@ -4,7 +4,8 @@
 
 // Constructor & Destructor
 
-DataImport::DataImport(const string& DataName) {
+DataImport::DataImport(const string &DataName)
+{
     this -> DataName = DataName;
     file.open(DataName);
 };

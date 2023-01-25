@@ -30,6 +30,8 @@ private:
     int ClientPort;
     DefaultIO* Socket;
     InputCheck InCheck;
+    int counter = 1;
+    int SocketNum;
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);

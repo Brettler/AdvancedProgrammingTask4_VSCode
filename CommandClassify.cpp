@@ -1,9 +1,7 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
 
-
 #include "Command.h"
-
 
 CommandClassify::CommandClassify(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
@@ -21,18 +19,11 @@ CommandClassify::~CommandClassify(){}
 
 void CommandClassify::execute(SharedData* shared) {
     string label;
-    try {
-        cout << "We are in try" << endl;
-        if(shared->GetClassifiedData()->GetDataMap().size() == 0) {
-            cout << "We are in try in if" << endl;
-            dio -> write("please upload data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
-        cout << "We are in catch" << endl;
+    if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
     }
+
     cout << "before for loop" << endl;  
     for (int i = 0; i < shared -> GetUnclassifiedData() -> UnclassifiedVectors.size(); i++) {
         // Create KNN object;

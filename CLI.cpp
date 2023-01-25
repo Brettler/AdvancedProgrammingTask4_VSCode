@@ -3,9 +3,9 @@
 
 #include "CLI.h"
 // Command line interface
-CLI::CLI(DefaultIO* dio) {
+CLI::CLI(DefaultIO* dio, int ClientSockNum) {
     this->dio=dio;
-    this -> shared = new SharedData;
+    this -> shared = new SharedData(ClientSockNum);
 
     this -> CommandCSV = new CommandUploadCSV(dio, shared);
     CommandsVec.push_back(CommandCSV);
@@ -27,6 +27,7 @@ CLI::CLI(DefaultIO* dio) {
 }
 
 void CLI::start(){
+    InputCheck ic;
     int UserChoice=0;
     vector<int> ValidChoices = {1, 2, 3, 4, 5 ,8};
     while(UserChoice!=8){
@@ -35,37 +36,16 @@ void CLI::start(){
         for (int i = 0; i < CommandsVec.size(); ++i) {
             dio -> write(CommandsVec[i]->GetDescription());
         }
-        //cout << "Server Waiting for user choise: " << endl;
+  
         string ClientRespond = dio -> read();
-        //cout << "User Choise is: " << ClientRespond << endl;
-        //cout << "Now trying to conver choise to an int" << endl;
-        // *************************************************************
-        // need to check what hppaned if the respond is not an int!!
-        // For example when the input : 4 MAN (it will think we want 4)
-        // *************************************************************
-        UserChoice = atoi(ClientRespond.c_str());
-        //cout <<"Conver Success" << endl;
+
+        //UserChoice = atoi(ClientRespond.c_str());
+        UserChoice = ic.ValidKNumber(ClientRespond.c_str());
+        // if UserChoise is not numeric number ValidKNumber will return -1.
         if (count(ValidChoices.begin(), ValidChoices.end(), UserChoice) == 0) {
             dio -> write("invalid input\n") ;
             continue;
         }
-        // if(UserChoice == 1){
-        //     CommandsVec.at(0) -> execute(this -> shared);
-        // }
-        // if(UserChoice == 2){
-        //     CommandsVec.at(1) -> execute(this -> shared);
-        // }
-        // if(UserChoice == 3){
-        //     CommandsVec.at(2) -> execute(this -> shared);
-        // }
-        // if(UserChoice == 4){
-        //     CommandsVec.at(3) -> execute(this -> shared);
-        // }
-        // // Exit command should be the last element in the vector;
-        // if(UserChoice == 8){
-        //     CommandsVec.at(2) -> execute(this -> shared);
-        // }
-        
 
         if (UserChoice == 8) {
             CommandsVec.at(5) -> execute(this -> shared);
