@@ -40,7 +40,7 @@ _Warning:_ This program only supports CSV files. The presence of any whitespace 
 
 * ServerClass - This class receives a map of data and a port number to establish a connection with a client. The 'run' function sets up a socket and a port, and attempts to connect them. The server listens for incoming clients and maintains a queue of up to five clients. When a client connects, the server can continuously process their requests, sending back a response such as a label calculated by using the KNN algorithm, or a message indicating invalid input.
 
-* ClientClass - This class establishes a connection with a server using an IP address and a port number. The run function initializes a socket, sets the IP address and port, and creates the connection. It then prompts the user for input containing a vector, metric, and k value, and validates the arguments received. The client sends the validated message to the server and waits for a response. If an error occurs while sending the message, the socket is closed and the program exits. If everything is successful, the client displays the label received from the server or an error message to the user. The client remains in a loop, continuously waiting for the user's next input. To terminate the client, the user can enter '-1', which will close the client but not the server. 
+* ClientClass - This class establishes a connection with a server using an IP address and a port number. The run function initializes a socket, sets the IP address and port, and creates the connection. It then prompts the user for input containing a vector, metric, and k value, and validates the arguments received. The client sends the validated message to the server and waits for a response. If an error occurs while sending the message, the socket is closed and the program exits. If everything is successful, the client displays the label received from the server or an error message to the user. The client remains in a loop, continuously waiting for the user's next input. To terminate the client, the user can enter '-1', which will close the client but not the server.
 
 * DataImport - This class receives the name of a CSV file and attempts to open it. If the file is not empty, it processes each row as a sample, placing the numeric values into a vector representing the key, and placing the classification name into a string representing the value in a map. While generating the map, it ensures that all vectors are of the same size and eliminates duplicates.
 
@@ -51,5 +51,27 @@ _Warning:_ This program only supports CSV files. The presence of any whitespace 
 * InputCheck - This class validates all input to ensure the program runs smoothly. If any validation check fails, the program will either terminate or send an error message. The user input is validated by checking the K value, file path, metric name, and numeric vector inputs. It also performs file checks like verifying the file name, checking for empty files, and the existance of whitespace characters. In addition, it checks for matching vector sizes, and converts string vectors to double vectors. It validates the client properties such as the client message, port number, and IP address.
 
 * KNN - This class performs the main task of the program. It takes in the K value, a map of data, a distance metric, and a vector as input. It first calculates the distances between the input vector and all samples in the data map using the provided distance metric. It stores all distance-label pairs in a multimap, which automatically sorts them in ascending order. This means that the samples with the shortest distance to the input vector will be at the beginning of the multimap. It then selects the K labels at the beginning of the multimap and places them in a vector of strings. These K labels correspond to the K nearest neighbors. Finally, it predicts the label of the input vector based on the most common label among the K nearest neighbors.
+
+* CLI - This class is designed to handle the communication and execution of commands between a client and the server. It is instantiated for each client that connects to the server using an instance of DefaultIO, and creating an instance of SharedData. It also contains a list of available commands that can be executed by the client in a command vector. The class greets the client with the server's welcome menu and handles the client's command selections.
+
+* Command - This class serves as a base for all command classes, and each derived class overrides the execute method to perform a specific action. It takes in an instance of DefaultIO and SharedData from each derived class to access necessary information for execution.
+
+* CommandUploadCSV - This command class allows the user to upload two types of files to the server, a classified data file and an unclassified data file. It verifies the validity of each file before uploading it. If a file is determined to be valid, it sets the appropriate classified or unclassified data in the SharedData object and returns the message "Upload complete." If the file is invalid, it returns the message "Invalid input." The command processes each row of the file individually and stores it in a new file on the server. The welcome menu will be displayed once again after this.
+
+* CommandSettingsKNN - This command class enables the user to configure the settings of the KNN model. The default settings are K = 5 and metric = "AUC". If the user desires to change these values, they can enter new values in the specified order. These values will be updated in the SharedData object. If the user presses 'Enter' without entering new values, the current settings will be retained. Any invalid input will result in the server returning the message "Invalid input" and the current settings will remain unchanged. The welcome menu will be displayed once again after this.
+
+* CommandClassify - This command class allows the user to run the KNN algorithm using a classified data file as the training set and an unclassified data file as the test set, utilizing the KNN settings saved in the SharedData object. Upon completion, the classified results will be stored in the appropriate vector of the SharedData object and the message "classifying data complete" will be returned. If data has not been uploaded prior to calling this command, the classification will not take place and the message "please upload data" will be returned. The welcome menu will be displayed once again after this.
+
+* CommandDisplay - 
+
+* CommandDownload - 
+
+* CommandExit - 
+
+* SharedData - 
+
+* DefaultIO -  
+
+* SocketIO - 
 
 Each class has a header file that declares its member & function declarations, lists the necessary imported libraries, and includes the required headers.
