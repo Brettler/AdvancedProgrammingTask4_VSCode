@@ -3,19 +3,13 @@
 
 #include "Command.h"
 
+// Constructor
 CommandClassify::CommandClassify(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
             this -> description = "3. classify data\n";
         }
 
 CommandClassify::~CommandClassify(){}
-
-/*string Command::GetDescription() {
-    return this->description;
-}*/
-/*SharedData* Command::GetSharedData() {
-    return this->shared;
-}*/
 
 void CommandClassify::execute(SharedData* shared) {
     string label;
@@ -24,19 +18,14 @@ void CommandClassify::execute(SharedData* shared) {
         return;
     }
 
-    cout << "before for loop" << endl;  
     for (int i = 0; i < shared -> GetUnclassifiedData() -> UnclassifiedVectors.size(); i++) {
         // Create KNN object;
-        cout << "making classifier" << endl;
         KNN classifier(shared -> GetK(), shared -> GetClassifiedData() -> DataMap, shared -> GetMetric(),
         shared -> GetUnclassifiedData() -> UnclassifiedVectors[i]);
-        cout << "calling predict function" << endl;
         label = classifier.predict();
-        cout << "set results vector" << endl;
         // We save each label in a vector;
         shared -> SetResultsVector(label);
     }
-    cout << "writing back to the client" << endl;
     dio -> write("classifying data complete\n");
 }
 

@@ -3,10 +3,6 @@
 
 #include "DefaultIO.h"
 
-
 DefaultIO::~DefaultIO(){};
-
 string DefaultIO::read(){};
 void DefaultIO::write(string information){};
-//void DefaultIO::write(float f){};
-//void DefaultIO::read(float* f){};

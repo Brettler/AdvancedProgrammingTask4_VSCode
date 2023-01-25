@@ -24,12 +24,10 @@ protected:
     DefaultIO* dio;
     string description;
 public:
-    //Command(DefaultIO* dio, string description, SharedData* shared);
     Command(DefaultIO* dio, SharedData* shared);
     virtual ~Command();
     virtual void execute(SharedData* shared) = 0;
     virtual string GetDescription() = 0;
-    //virtual SharedData* GetSharedData();
 };
 
 class CommandUploadCSV : public Command {
