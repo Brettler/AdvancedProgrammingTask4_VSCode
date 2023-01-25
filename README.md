@@ -27,15 +27,15 @@ Note: the 'port' value must be the same for the server and client.
 
 * Creating the server and the client using the command ./server.out or ./client.out respectively.
 * 'file_path' - The path of the file containing the classified data.
-* 'port' - The port number the server listens on and establishes a connection with a client through.
+* 'port' - The port number the server listens on and establishes a connection with a client through. The valid port number range is between 0 and 65535.
 * 'IP_address' - The IPv4 address of the server the client wishes to connect to.
 
 Next, the user may input the information for the sample they wish to classify: 'vector' 'distance_metric' 'k_value'. The program will then display the classification of the sample, or an error message if an invalid input was received. The user may continue to input new samples as described above, or terminate the program by typing '-1'.
 
-# Invalid Input:---
-This program processes a CSV file containing classified samples. Each row represents a single sample, with all columns containing 'double' values except for the last column, which should contain the classification name.
+# Invalid Input:
+This program processes two types of CSV files: one that includes labeled samples, and one that includes unlabeled samples. In both types, each row represents a single sample, with all columns holding numerical values of "double" type, with the exception of the last column in the labeled file, which should contain the sample's label.
 
-If the program encounters invalid inputs during the initialization of the server or the client, it will terminate. If it receives invalid inputs from the user or the file, it will display an error message. Invalid inputs include an empty or corrupted file, an incorrect file path, a file with whitespace characters between vector values, and values that cannot be converted to the appropriate data type ('double', 'int', etc).
+The program will terminate if it encounters invalid inputs during server or client initialization. If invalid inputs are received from the user or file, it will display the relevant error message and return to the menu. Invalid inputs include an empty or corrupted file, an incorrect file path, a file with whitespace characters between vector values, and values that cannot be converted to the appropriate data type ('double', 'int', etc).
 
 _Warning:_ This program only supports CSV files. The presence of any whitespace characters within a vector will cause the program to terminate. Please take this into consideration.
 
