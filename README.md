@@ -70,8 +70,8 @@ _Warning:_ This program only supports CSV files. The presence of any whitespace 
 
 * SharedData - This class houses all the information required for various commands to execute correctly. This information includes the algorithm settings k and metric, a map of the classified data file, a vector of the unclassified data file, a vector containing the classification results, and the client socket number. Each member has a corresponding get and set method, allowing all commands to access and update the SharedData object as necessary.
 
-* DefaultIO -  
+* DefaultIO - This class serves as the foundation for input and output, and is the foundation for communication between the server and the client. Derived classes will override the implementation of the read and write methods.
 
-* SocketIO - 
+* SocketIO - This class is derived from the DefaultIO base class, it receives a socket number associated with each client, and facilitates communication between that client and the server. It overrides the read and write methods and implements them using string messages.
 
 Each class has a header file that declares its member & function declarations, lists the necessary imported libraries, and includes the required headers.
