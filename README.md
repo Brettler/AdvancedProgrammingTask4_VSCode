@@ -2,25 +2,20 @@
 Eden Berman &amp; Liad Brettler
 
 # Description:---
-In this program, we created a server and client and established a connection between them using a Command Line Interface (CLI). The program is constructed using the Command design pattern which is a way to separate the actions an object can perform from the object itself, by encapsulating the actions into separate command objects. This allows for more flexibility in controlling and managing the actions.
-Multiple clients can connect to the server at once and submit requests. Once a client establishes a connection with the server, a welcome menu is sent to it describing the actions that can be performed all surrounding the execution of the KNN classification algorithm. These actions include:
-1. Uploading the classified (train set) and unclassified (test set) CSV files.
-2. Configuring the algorithm settings - K value and metric value (Euclidean, Manhattan, Chebyshev, Canberra, or Minkowsk).
-3. Classifying the test set.
-4. Displaying the classification results in an indexed order.
-5. Downloading a file locally containing the classification results.
-
-
-
-
-
-In this program, we created a server and client and established a connection between them. The client sends the server an unclassified vector received from the user, and the server runs the KNN algorithm on the vector and returns the result to the client to be displayed to the user. The client runs in an infinite loop, waiting for the next user input. The user can close the client by typing '-1', which will close the connection to the server and then shut down the program. However, the server remains active and listens for the next client to request a connection. As long as a client is connected to the server, the server will listen for new requests.
+In this program, we created a server and a client that communicate using a Command Line Interface (CLI). The program utilizes the Command design pattern, which separates actions from the object itself by encapsulating them in separate command objects, providing greater flexibility in managing and controlling actions. Multiple clients can connect to the server simultaneously, each through a separate socket, and submit requests to execute the KNN classification algorithm. Once connected, the client is presented with a menu of options including the following:
+1. Uploading classified and unclassified CSV files for train and test sets respectively.
+2. Configuring K value and distance metric for the KNN algorithm settings.
+3. Classifying test set using the KNN algorithm.
+4. Displaying classification results.
+5. Downloading classification results locally.
+8. Exiting the program.
+Each action is implemented using an execution method in the CLI, verification methods in both the server and client, and socket-based input/output communication. The server remains active and listens continuously for new client connections, and as long as a client is connected, the server will process requests.
 
 # Compile & Run Instructions:---
 Run the following commands:
 * git init
-* git clone https://github.com/Brettler/AdvancedProgrammingTask3.git
-* cd 'path' - for example: /u/students/brettll1/AdvancedProgrammingTask3
+* git clone https://github.com/Brettler/AdvancedProgrammingTask4_VSCode.git
+* cd 'path' - for example: /u/students/brettll1/AdvancedProgrammingTask4_VSCode.git
 * make
 
 To start the server, enter the following command and arguments in this order: *./server.out 'file_path' 'port'.*
