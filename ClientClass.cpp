@@ -216,6 +216,38 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket,string OutputFile) {
                 cout << label << endl;
             }
         }
+        if (input == "5") {
+            
+            string row;
+            string StatusReport = Socket -> read();
+            if (StatusReport == "please classify the data" || StatusReport == "please upload data") {
+                cout << StatusReport << endl;
+                continue;
+            } else {
+                InputCheck ic;
+                // Getting path from the user
+                string PathDownload;
+                cin >> PathDownload;
+                ofstream ResultsFile(PathDownload + "/ResultsFile.csv");
+                // Check if valid path given
+                bool ValidPath = ic.ValidFilePath(PathDownload + "/ResultsFile.csv");
+                if (!ValidPath) {
+                    cout << "invalid input\n";
+                    Socket -> write("err_exp\n");
+                    continue;
+                }
+                else {
+                    Socket -> write("good\n");
+                }
+                // Printing for the user the index and label.
+                row = Socket -> read(); 
+                do {
+                    ResultsFile << row << '\n';
+                    row = Socket -> read();     
+                } while(row != "Done.");
+                ResultsFile.close();
+            }
+        }
     }
 
     pr.close();

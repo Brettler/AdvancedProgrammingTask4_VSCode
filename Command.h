@@ -63,6 +63,14 @@ public:
     string GetDescription() override;
 };
 
+class CommandDownload : public Command {
+public:
+    explicit CommandDownload(DefaultIO* dio, SharedData* shared);
+    ~CommandDownload();
+    void execute(SharedData* shared) override;
+    string GetDescription() override;
+};
+
 class CommandExit : public Command {
 public:
     explicit CommandExit(DefaultIO* dio, SharedData* shared);
