@@ -9,6 +9,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstdlib>
+#include <ctime>
 #include "DefaultIO.h"
 #include "SharedData.h"
 #include "DataImport.h"

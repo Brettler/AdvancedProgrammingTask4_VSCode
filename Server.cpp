@@ -13,7 +13,9 @@ int main(int argc, char* argv[]) {
     // Start the server and execute its functions.
     ServerClass server(ServerPort);
     server.run();
-
+    for (auto &thread : server.ThreadPool) {
+        thread.join();
+    }
     /*
 
     // Validate each element based on its type.

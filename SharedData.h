@@ -19,27 +19,8 @@
 
 using namespace std;
 
-// class SharedData{
-// private:
-//     string path;
-//     int* k;
-//     string* metric;
-//     DataImport* data;
-// public:
-//     SharedData();
-//     ~SharedData();
-//     void SetPath(string FilePath);
-
-
-//     string GetPath();
-//     int* GetK();
-//     string* GetMetric();
-//     DataImport* GetData(string* path);
-
-// };
-
-class SharedData {
-private:
+class SharedData {      
+public:
     string ClassifiedPath;
     string UnclassifiedPath;
     int k;
@@ -47,8 +28,10 @@ private:
     DataImport* ClassifiedData;
     DataImport* UnclassifiedData;
     vector<string>* ResultsVector;
-public:
-    SharedData();
+    int CLISockNum;
+    int counter = 1;
+
+    SharedData(int ClientSockNum);
 
     ~SharedData();
 
@@ -59,18 +42,19 @@ public:
     string GetUnclassifiedPath();
 
     int GetK() const;
-    void SetK(int& NewK);
+    void SetK(int NewK);
 
     string GetMetric() const;
-    void SetMetric(string& NewMetric);
+    void SetMetric(string NewMetric);
 
     vector<string>* GetResultsVector() const;
     void SetResultsVector(string& label);
 
     DataImport* GetClassifiedData();
-    DataImport* GetUnclassifiedData();
+    void SetClassifiedData();
 
+    DataImport* GetUnclassifiedData();
+    void SetUnclassifiedData();
 
 };
-
 #endif //ADVANCEDPROGRAMMINGTASK4_SHAREDDATA_H

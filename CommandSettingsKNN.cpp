@@ -44,15 +44,12 @@ void CommandSettingsKNN::execute(SharedData* shared) {
     is >> metric;
     bool ValidMetric = CheckObject.ValidDistanceMetric(metric);
     bool ValidSizeK = true;
-    try {
-        cout << "Very long and lage shittt " << shared->GetClassifiedData()->GetDataMap().size() << endl;
-        if(shared->GetClassifiedData()->GetDataMap().size() < k) {
-            ValidSizeK = false;
-            cout << "Flag status is: " << ValidSizeK << endl;
-        }
-    } catch (int& nullptr_ex) {
-        cout << "WE ARE IN CATCH !!! \n";
+
+    // Check if the user upload data, if not he cant choose k. 
+    if (shared -> ClassifiedData == nullptr) {
+       cout << "NULL" << endl;
         ValidSizeK = false;
+
     }
 
     if (!ValidMetric && (k == -1 || !ValidSizeK )) {

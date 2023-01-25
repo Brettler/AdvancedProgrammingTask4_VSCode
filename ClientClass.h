@@ -30,15 +30,18 @@ private:
     int ClientPort;
     DefaultIO* Socket;
     InputCheck InCheck;
+    int counter = 1;
+    int SocketNum;
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
     // Functions:
     int run();
     void SendMessages(DefaultIO* ServerSocket);
-    void ReceiveMessages(DefaultIO* ServerSocket,string outputFile);
+    void ReceiveMessages(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
+    void  DownloadFile();
     //void ClientInteraction(int ServerSocket, string output);
 };
 

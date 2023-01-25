@@ -19,13 +19,13 @@ SocketIO::~SocketIO(){}
         ServerMessage += c;
         ::read(ClientSocket, &c, sizeof(char));
     }
-    cout << "SocketIO::read() return: " << ServerMessage << endl;
+    //cout << "SocketIO::read() return: " << ServerMessage << endl;
     return ServerMessage;
 }
 
 // Write message through the socket connection
  void SocketIO::write(string information){
-    cout << "Using SocketIO::write with the string: " << information << endl;
+    //cout << "Using SocketIO::write with the string: " << information << endl;
     ::write(ClientSocket, information.c_str(), information.length());
     //::write(ClientSocket, "\n", 1);
  }

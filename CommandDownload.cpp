@@ -22,22 +22,11 @@ CommandDownload::~CommandDownload(){}
 void CommandDownload::execute(SharedData* shared) {
     string index;
     
-    try {
-        if(shared->GetClassifiedData()->GetDataMap().size() == 0) {
-            dio -> write("please upload data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
     }
-
-    try {
-        if((*shared -> GetResultsVector()).size() == 0) {
-            dio -> write("please classify the data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    if ((*shared -> GetResultsVector()).size() == 0) {
         dio -> write("please classify the data\n");
         return;
     }
