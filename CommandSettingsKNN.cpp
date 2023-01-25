@@ -1,9 +1,7 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
 
-
 #include "Command.h"
-
 
 CommandSettingsKNN::CommandSettingsKNN(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
@@ -11,13 +9,6 @@ CommandSettingsKNN::CommandSettingsKNN(DefaultIO* dio, SharedData* shared)
         }
 
 CommandSettingsKNN::~CommandSettingsKNN(){}
-
-/*string Command::GetDescription() {
-    return this->description;
-}*/
-/*SharedData* Command::GetSharedData() {
-    return this->shared;
-}*/
 
 void CommandSettingsKNN::execute(SharedData* shared) {
     InputCheck CheckObject;
@@ -30,14 +21,7 @@ void CommandSettingsKNN::execute(SharedData* shared) {
     dio -> write(metric+'\n');
     // Recive arugments from client
     string InputSetting = dio -> read();
-    cout << "ServerMteric user input is: " << InputSetting << endl;
-    // if (InputSetting == "0 0"){
-    //     // Returning to menu
-    //     return;
-    // }
-    // Checking User's argument "<k> <metric>"
-    
-
+  
     istringstream is(InputSetting);
     is >> StringK;
     k = CheckObject.ValidKNumber(StringK);
@@ -47,9 +31,7 @@ void CommandSettingsKNN::execute(SharedData* shared) {
 
     // Check if the user upload data, if not he cant choose k. 
     if (shared -> ClassifiedData == nullptr) {
-       cout << "NULL" << endl;
         ValidSizeK = false;
-
     }
 
     if (!ValidMetric && (k == -1 || !ValidSizeK )) {

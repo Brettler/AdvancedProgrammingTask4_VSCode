@@ -8,7 +8,8 @@ int main(int argc, char* argv[]) {
 
     // Confirm that the three required arguments have been provided: the execute command, IP address, and port number.
     InputCheck InCheck;
-    //InCheck.ValidNumberArgs(argc);
+    string FlagC = "c";
+    InCheck.ValidNumberArgs(argc, FlagC);
 
     // Verify that the IP address is in a valid IPv4 format and convert it to a char array if it is.
     string IPAddress = argv[1];
@@ -21,13 +22,12 @@ int main(int argc, char* argv[]) {
     // Start the client and execute its functions.
     ClientClass client(BufferIPAddress, ClientPort);
     int SocketNumber = client.run();
-    string Menu = "Server_Menu";
-    //client.ClientInteraction(SocketNumber, Menu);
+
     SocketIO ServerSocketIO(SocketNumber);
     // Using functor to initialize the thread.
     // Functor taking object and the variables of this object and send it to the Thread constructor.
-    //thread SendThread([&client, &ServerSocketIO]()
-    //                    { client.SendMessages(&ServerSocketIO); });
+    // thread SendThread([&client, &ServerSocketIO]()
+    //                     { client.SendMessages(&ServerSocketIO); });
     //thread ReceiveThread(client.ReceiveMessages, SocketNumber, outputFile);
     thread ReceiveThread([&client, &ServerSocketIO]()
                         { client.ReceiveMessages(&ServerSocketIO); });

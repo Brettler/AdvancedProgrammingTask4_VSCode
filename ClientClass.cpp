@@ -37,33 +37,32 @@ int ClientClass::run() {
 
 
 
+//  void ClientClass::SendMessages(DefaultIO* ServerSocket) {
+//         this -> Socket = ServerSocket;
+//      //unique_lock<mutex> lock(mtx);
+//         string row;
+//         ofstream ResultsFile(FullPathOyler, ios::out | ios::trunc);
+//         // Saving for the user the index and label.
+//         row = Socket -> read(); 
+//         do {
+//             ResultsFile << row << endl;
+//             row = Socket -> read();
+//             // We clean the whitspace in the last row
+//             if (row == "Done.") {
+//                 // need to handl last line as a whitespaces;
+//             }
+//         } while(row != "Done.");
+//         //ResultsFile.close();
+//         this -> counter++;
+//         //lock.unlock();
+//  }
 
-// void ClientClass::SendMessages(DefaultIO* ServerSocket) {
-//     this -> Socket = ServerSocket;
-//     ifstream in("input.txt");
-//     string input;
-//     string path;
-//     while(input!="8"){
-//         getline(in,input);
-//         ServerSocket -> write(input);
-//         if(input=="1"){
-//             cin >> path;
-//             InterfaceSendFile (path);
-//             /*getline(in,input);
-//             while(input!="done"){
-//                 getline(in,input);
-//                 ServerSocket -> write(input)*/;
-//         }
-//     }
-// }
-//in.close();
 
 
 void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     string input = "0";
     string respond ="0";
-    ifstream in("input.txt");
     while(input != "8"){
   
         PrintMenu();
@@ -83,7 +82,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 continue;
             }
             // "Please upload your local train CSV file.\n"
-            cout << respond; 
+            cout << respond << endl; 
             string path;
             cin >> path;
             bool ValidFilePath = InCheck.ValidFilePath(path);
@@ -121,9 +120,8 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
             // Split the string of information <k> <metric>
             istringstream is(UserSettingInput);
             is >> UserK;
-            cout << "UserK = " << UserK << endl;
             is >> UserMetric;
-            cout << "UserMetric = " << UserMetric << endl;
+       
             // Send to the server user choice as one string.
             Socket -> write(UserK+ " " +UserMetric+'\n');
 
@@ -141,11 +139,15 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
             }
             continue;
         }
+
+        // Execute command 3 aka callasify the data
         if (input == "3") {
             // Reading from the server if the clasifying was successfull complete or not
             string done = Socket -> read();
             cout << done << endl;
         }
+
+        // Execute command 4 aka display the results to the user
         if (input == "4") {
             string label = Socket -> read();
             if (label == "please classify the data" || label == "please upload data") {
@@ -160,9 +162,49 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 label = Socket -> read();      
                 cout << label << endl;
             }
+            // Waiting for the user to press enter, when he does we continue
+            string enter;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
         }
+
+        // Execute command 5 aka download.
         if (input == "5") {
-            
+            string StatusReport = Socket -> read();
+            if (StatusReport == "please classify the data" || StatusReport == "please upload data") {
+                cout << StatusReport << endl;
+                continue;
+            } else {
+                InputCheck ic;
+                // Getting path from the user
+                string PathDownload;
+                cin >> PathDownload; 
+                
+                string FullPath = PathDownload + "/ResultsFile_" +to_string(this-> SocketNum) + "_" + to_string(counter) +".csv";
+                ofstream ResultsFile(FullPath, ios::out | ios::trunc);
+                cout << "Path is " << FullPath << endl;
+                // Check if valid path given
+                bool ValidPath = ic.ValidFilePath(FullPath);
+                if (!ValidPath) {
+                    cout << "invalid input\n";
+                    Socket -> write("err_exp\n");
+                    continue;
+                }
+                else {
+                    Socket -> write("good\n");
+                }
+
+                //this -> FullPathOyler = FullPath;
+                //this -> PerfectPath =FullPath;
+                ResultsFile.close();
+                //DownloadFile(&ResultsFile);
+                //thread download(&ClientClass::DownloadFile, this, FullPath);
+                // This will run the thread in the background and allow the program to continue executing
+                //download.detach();
+                DownloadFile(FullPath);
+               
+                
+            }
         }
     }
 }
@@ -176,7 +218,6 @@ void ClientClass::PrintMenu(){
         if(RowInMenu == "8. exit")
             FlagFinishReading = true;
     }
-
 }
 
 bool ClientClass::InterfaceSendFile (string& path) {
@@ -231,42 +272,28 @@ bool ClientClass::InterfaceSendFile (string& path) {
     return true;
 }
 
-void ClientClass::DownloadFile(){
-        string row;
-        string StatusReport = Socket -> read();
-        if (StatusReport == "please classify the data" || StatusReport == "please upload data") {
-            cout << StatusReport << endl;
-            continue;
-        } else {
-            InputCheck ic;
-            // Getting path from the user
-            string PathDownload;
-            cin >> PathDownload; 
-            string FullPath = PathDownload + "/ResultsFile_" +to_string(this-> SocketNum) + "_" + to_string(counter) +".csv";
-            
-            cout << "Full path is: " << FullPath << endl;
-            ofstream ResultsFile(FullPath, ios::out | ios::trunc);
-            // Check if valid path given
-            bool ValidPath = ic.ValidFilePath(FullPath);
-            if (!ValidPath) {
-                cout << "invalid input\n";
-                Socket -> write("err_exp\n");
-                continue;
-            }
-            else {
-                Socket -> write("good\n");
-            }
-            // Printing for the user the index and label.
-            row = Socket -> read(); 
-            do {
-                ResultsFile << row << endl;
-                row = Socket -> read();
-                // We clean the whitspace in the last row
-                if (row == "Done.") {
-                    // need to handl last line as a whitespaces;
-                }
-            } while(row != "Done.");
-            //ResultsFile.close();
-            this -> counter++;
+void ClientClass::DownloadFile(string path){
+    
+    //cout << "We are in downloadfile functionn\n";
+    //unique_lock<mutex> lock(mtx);
+    ofstream ResultsFile(path, ios::out | ios::trunc);
+    string row;
+    // Saving for the user the index and label.
+    row = Socket -> read(); 
+    do {
+        //cout << "We are in the do while looop\n";
+        ResultsFile << row << endl;
+        row = Socket -> read();
+        // We clean the whitspace in the last row
+        if (row == "Done.") {
+            cout << "We are in if done\n";
+
+            // need to handl last line as a whitespaces;
         }
+    } while(row != "Done.");
+    //ResultsFile.close();
+    //cout << "Finished the while done loop\n";
+
+    this -> counter++;
+    //lock.unlock();
 }

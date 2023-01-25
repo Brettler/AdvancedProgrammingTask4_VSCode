@@ -4,7 +4,6 @@
 #include "ServerClass.h"
 
 // Constructor
-// :DataMap(DataMap) - this format receives the const arguments by reference.
 ServerClass::ServerClass(int ServerPort):ServerPort(ServerPort)  {
     // Initialize a socket.
     this -> sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -45,11 +44,6 @@ void ServerClass::run() {
         ClientQueue.push(ClientSock);
         // Creat new thread
         ThreadPool.emplace_back(&ServerClass::ThreadExecutor, this);
-
-        //SocketIO SockOBJ(ClientSock);
-        //CLI cli(&SockOBJ);
-        //thread ReceiveThread(cli.start());
-        //cli.start();
 
     }
 }

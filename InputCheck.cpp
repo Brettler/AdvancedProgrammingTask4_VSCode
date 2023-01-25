@@ -28,54 +28,12 @@ bool InputCheck::ValidDoubleVector(const string& input) const {
     return FlagValidChars;
 }
 
-// Validate the user input received in the client.
-bool InputCheck::ValidClientMessage(const string& StringInput) const {
-    //vector<double> DoubleVec;
-    string TempStringInput = StringInput;
-    string metric;
-    string KString;
-
-    istringstream is(TempStringInput);
-
-    // Read the vector values.
-    // while (is >> TempStringInput) {
-    //     try {
-    //         // If the conversion from string to double using 'stod' is successful, we will perform additional checks to
-    //         // catch edge cases such as "12abc", which 'stod' will convert without an issue, but is an invalid value.
-    //         stod(TempStringInput);
-    //         bool FlagValidChars = ValidDoubleVector(TempStringInput);
-    //         if (!FlagValidChars) {
-    //             // If the input is not a valid number, it must be a distance measurement.
-    //             metric = TempStringInput;
-    //             break;
-    //         }
-    //     }
-    //     catch (exception& invalid_value) {
-    //         // If the input is not a valid number, it must be a distance measurement.
-    //         metric = TempStringInput;
-    //         break;
-    //     }
-    // }
-
-    is >> KString;
-    int k = ValidKNumber(KString);
-
-    is >> metric;
-    //metric = TempStringInput;
-    // Read and validate the k value.
-    
-
-    // Validate the metric.
-    if (!ValidDistanceMetric(metric) || k == -1) {
-        return false;
-    }
-
-    return true;
-}
-
 // Check if the correct number of arguments is passed.
-void InputCheck::ValidNumberArgs(const int& argc) const {
-    if (argc != 3) {
+void InputCheck::ValidNumberArgs(const int& argc, const string& flag) const {
+    if (flag == "c" && argc != 3) {
+        cerr << "Error: incorrect number of arguments." << endl;
+        exit(1);
+    } else if (flag == "s" && argc != 2) {
         cerr << "Error: incorrect number of arguments." << endl;
         exit(1);
     }
@@ -89,7 +47,7 @@ int InputCheck::ValidPortCheck(const string& PortString) const {
         int PortInt = ValidKNumber(PortString);
 
         // If the port isn't a positive integer, or is out of range, terminate the program.
-        if (PortInt == -1 || PortInt > 65535) {
+        if (PortInt < -1 || PortInt > 65535) {
             cerr << "Error: invalid port number, must be in range [0-65535]" << endl;
             exit(1);
         }
@@ -137,6 +95,7 @@ void InputCheck::ValidIPv4Address(const string& ip) const {
 }
 
 // Convert a vector of strings into a vector of doubles.
+// When we call this method the vector is for sure pure doubls
 vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
 
     vector<double> vec;

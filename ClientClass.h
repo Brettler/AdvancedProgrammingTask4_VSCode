@@ -16,6 +16,7 @@
 #include <string>
 #include <thread>
 #include <fstream>
+#include <mutex>
 #include "InputCheck.h"
 #include "DefaultIO.h"
 
@@ -32,6 +33,8 @@ private:
     InputCheck InCheck;
     int counter = 1;
     int SocketNum;
+    mutex mtx;
+    string PerfectPath;
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
@@ -41,8 +44,8 @@ public:
     void ReceiveMessages(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
-    void  DownloadFile();
+    void  DownloadFile(string path);
     //void ClientInteraction(int ServerSocket, string output);
 };
 
-#endif //ADVANCEDPROGRAMMINGTASK3_CLIENTCLASS_H
+#endif // HEADER_CLIENTCLASS_H
