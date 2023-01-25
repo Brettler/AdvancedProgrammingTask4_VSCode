@@ -68,7 +68,7 @@ _Warning:_ This program only supports CSV files. The presence of any whitespace 
 
 * CommandExit - This command class allows the user to terminate the connection with the server.
 
-* SharedData - 
+* SharedData - This class houses all the information required for various commands to execute correctly. This information includes the algorithm settings k and metric, a map of the classified data file, a vector of the unclassified data file, a vector containing the classification results, and the client socket number. Each member has a corresponding get and set method, allowing all commands to access and update the SharedData object as necessary.
 
 * DefaultIO -  
 
