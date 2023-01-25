@@ -12,25 +12,24 @@ In this program, we created a server and a client that communicate using a Comma
 
 Each action is implemented using an execution method in the CLI, verification methods in both the server and client, and socket-based input/output communication. The server remains active and listens continuously for new client connections, and as long as a client is connected, the server will process requests.
 
-# Compile & Run Instructions:---
+# Compile & Run Instructions:
 Run the following commands:
 * git init
 * git clone https://github.com/Brettler/AdvancedProgrammingTask4_VSCode.git
 * cd 'path' - for example: /u/students/brettll1/AdvancedProgrammingTask4_VSCode.git
 * make
 
-To start the server, enter the following command and arguments in this order: *./server.out 'file_path' 'port'.*
+To start the server, enter the following command and arguments in this order: *./server.out 'port'.*
 
 In a separate terminal, start the client by entering the following command and arguments in this order: *./client.out 'IP_address' 'port'.*
 
 Note: the 'port' value must be the same for the server and client.
 
 * Creating the server and the client using the command ./server.out or ./client.out respectively.
-* 'file_path' - The path of the file containing the classified data.
 * 'port' - The port number the server listens on and establishes a connection with a client through. The valid port number range is between 0 and 65535.
 * 'IP_address' - The IPv4 address of the server the client wishes to connect to.
 
-Next, the user may input the information for the sample they wish to classify: 'vector' 'distance_metric' 'k_value'. The program will then display the classification of the sample, or an error message if an invalid input was received. The user may continue to input new samples as described above, or terminate the program by typing '-1'.
+Next, the client will display the options menu to the user. The user may submit a number (1, 2, 3, 4, 5, 8) representing the action he'd like to execute as described in the program description.
 
 # Invalid Input:
 This program processes two types of CSV files: one that includes labeled samples, and one that includes unlabeled samples. In both types, each row represents a single sample, with all columns holding numerical values of "double" type, with the exception of the last column in the labeled file, which should contain the sample's label.
