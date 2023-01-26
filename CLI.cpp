@@ -27,11 +27,11 @@ CLI::CLI(DefaultIO* dio, int ClientSockNum) {
 // Begin operating the CLI:
 void CLI::start() {
     InputCheck ic;
-    int UserChoice = 0;
+    int UserChoise = 0;
     vector<int> ValidChoices = {1, 2, 3, 4, 5 ,8};
 
     // The client's function is based on the CLI instance's operation.
-    while (UserChoice != 8) {
+    while (UserChoise != 8) {
         string WelcomeMenu = "Welcome to the KNN Classifier Server. Please choose an option:\n";
         dio -> write(WelcomeMenu);
         for (int i = 0; i < CommandsVec.size(); ++i) {
@@ -41,18 +41,27 @@ void CLI::start() {
         string ClientRespond = dio -> read();
 
         // If UserChoise is not a numeric value, the ValidKNumber method will return -1.
-        UserChoice = ic.ValidKNumber(ClientRespond.c_str());
-        if (count(ValidChoices.begin(), ValidChoices.end(), UserChoice) == 0) {
+        UserChoise = ic.ValidKNumber(ClientRespond.c_str());
+        if (count(ValidChoices.begin(), ValidChoices.end(), UserChoise) == 0) {
             dio -> write("invalid input\n") ;
             continue;
         }
 
         // Executing commands:
-        if (UserChoice == 8) {
+        // Command 8 is the exit however it is the 5th element in the vector
+        if (UserChoise == 8) {
             CommandsVec.at(5) -> execute(this -> shared);
         }
+        // Download command need to be in a diffrent thread
+        else if(UserChoise == 5){
+            thread download([this]()
+                            {CommandsVec.at(4) -> execute(this->shared);});
+            // This will run the thread in the background and allow the program to continue executing
+            download.detach();
+
+        }
         else {
-            CommandsVec.at(UserChoice - 1) -> execute(this -> shared);    
+            CommandsVec.at(UserChoise - 1) -> execute(this -> shared);    
         }
     }
 }
