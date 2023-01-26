@@ -206,12 +206,13 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 // ----------------------------------------------------------------------------------------------------------------
                 //this -> FullPathOyler = FullPath;
                 //this -> PerfectPath =FullPath;
-                ResultsFile.close();
+                //ResultsFile.close();
                 //DownloadFile(&ResultsFile);
-                //thread download(&ClientClass::DownloadFile, this, FullPath);
+                int numb = this -> SocketNum;
+                thread download(&ClientClass::DownloadFile, this -> Socket, FullPath);
                 // This will run the thread in the background and allow the program to continue executing
-                //download.detach();
-                DownloadFile(FullPath);
+                download.detach();
+                //DownloadFile(FullPath);
             }
         }
     }
@@ -282,11 +283,12 @@ bool ClientClass::InterfaceSendFile (string& path) {
 }
 
 // Downloading the classification results into a local file.
-void ClientClass::DownloadFile(string path){
-    
+void ClientClass::DownloadFile(DefaultIO* Socket, string path){
+    mutex mtx;
     // ------------------------------------------------------------------------------------------------------------------------------
     //cout << "We are in downloadfile functionn\n";
-    //unique_lock<mutex> lock(mtx);
+    unique_lock<mutex> lock(mtx);
+    //SocketIO sock(numb);
     ofstream ResultsFile(path, ios::out | ios::trunc);
     string row;
     // Saving for the user the index and label.
@@ -306,6 +308,6 @@ void ClientClass::DownloadFile(string path){
     //ResultsFile.close();
     //cout << "Finished the while done loop\n";
 
-    this -> counter++;
-    //lock.unlock();
+    //this -> counter++;------------------------
+    lock.unlock();
 }

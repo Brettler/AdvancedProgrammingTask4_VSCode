@@ -12,6 +12,7 @@ CommandDownload::~CommandDownload() {}
 
 // Download the classification results into a file locally.
 void CommandDownload::execute(SharedData* shared) {
+    unique_lock<mutex> lock(mtx);
     string index;
     //cout << "Start execute command\n";
 
@@ -43,6 +44,7 @@ void CommandDownload::execute(SharedData* shared) {
         dio -> write(index + "   " + (*shared -> GetResultsVector()).at(i) + "\n");
     }
     dio -> write("Done.\n");
+    lock.unlock();
     //cout << "finished the for loop \n";
 }
 

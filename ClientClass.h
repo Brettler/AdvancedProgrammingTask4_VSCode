@@ -31,7 +31,6 @@ private:
     InputCheck InCheck;
     int counter = 1;
     int SocketNum;
-    mutex mtx;
     string PerfectPath;
 public:
     // Constructor:
@@ -43,7 +42,7 @@ public:
     void ReceiveMessages(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
-    void  DownloadFile(string path);
+    void static DownloadFile(DefaultIO* Socket, string path);
     //void ClientInteraction(int ServerSocket, string output);
 };
 
