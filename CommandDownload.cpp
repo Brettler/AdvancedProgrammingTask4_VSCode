@@ -12,21 +12,16 @@ CommandDownload::~CommandDownload() {}
 
 // Download the classification results into a file locally.
 void CommandDownload::execute(SharedData* shared) {
-    unique_lock<mutex> lock(mtx);
-    string index;
-    //cout << "Start execute command\n";
 
     // If the data has yet to be uploaded or classified, return.
     if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
     }
-    //cout << "Before the second if\n";
     if ((*shared -> GetResultsVector()).size() == 0) {
         dio -> write("please classify the data\n");
         return;
     }
-    //cout << "Before writing good\n";
     dio -> write("good\n");
 
     // if server read err_exp means the user gave invalid path.
@@ -35,8 +30,10 @@ void CommandDownload::execute(SharedData* shared) {
     if (dio -> read() == "err_exp") {
         return;
     }
-
-    //cout << "Before the loop\n";
+    // else {
+    //     dio -> read(); // reading "good" response from the server.
+    // }
+    string index;
     // Insert the classification results into a file in the following format: <index> <label>.
     for (int i=0; i < (*shared -> GetResultsVector()).size(); i++) {
         index = to_string(i + 1);
@@ -44,8 +41,6 @@ void CommandDownload::execute(SharedData* shared) {
         dio -> write(index + "   " + (*shared -> GetResultsVector()).at(i) + "\n");
     }
     dio -> write("Done.\n");
-    lock.unlock();
-    //cout << "finished the for loop \n";
 }
 
 // Command description.

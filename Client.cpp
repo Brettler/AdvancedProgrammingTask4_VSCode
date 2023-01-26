@@ -36,6 +36,4 @@ int main(int argc, char* argv[]) {
     //SendThread.join(); 
     ReceiveThread.join();
     close(SocketNumber);
-    cout<<"Client Closed"<<endl;
-
 }

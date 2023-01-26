@@ -14,7 +14,6 @@ int ClientClass::run() {
 
     // Initialize the socket.
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-    cout << "Sock numer is: " << sock << endl;
     if (sock < 0) {
         perror("error creating socket");
         exit(1);
@@ -32,7 +31,6 @@ int ClientClass::run() {
         perror("error connecting to server");
         exit(1);
     }
-    this -> SocketNum = sock;
     return sock;
 }
 
@@ -64,16 +62,17 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     string input = "0";
     string respond = "0";
-
+    
     // Command executer.
-    while (input != "8") {
+    do {
+        bool FlagEnter = false;
         PrintMenu();
         // Receiving user's command choice.
         cin >> input;
         //cout << "Check input after doing complicated if: " << input << endl; ----------------------------------------------
         Socket -> write(input +'\n');
-
-        // Execute command UploadCSV.
+        // Execute command UploadCSV
+   
         if (input == "1") {
             respond = Socket -> read();
 
@@ -101,44 +100,12 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 cout << "invalid input\n";
                 continue;
             }
+            continue;
         }
 
         // Execute CommandSettingsKNN.
         if (input == "2") {
-            string UserSettingInput = "0";   
-            string UserMetric = "0"; 
-            string UserK = "0";
-
-            // Read current K and metric values from user and display them.
-            string CurrentK = Socket -> read();
-            cout << CurrentK << endl;
-            string CurrentMetric = Socket -> read();
-            cout << CurrentMetric << endl;
-            cout << "The current KNN parameters are: K = " << CurrentK << ", distance metric = " << CurrentMetric << endl;
-            
-            // Recive the new setting from the user.
-            cin.ignore();
-            getline(cin, UserSettingInput);
-            
-            // Split the information string <k> <metric>
-            istringstream is(UserSettingInput);
-            is >> UserK;
-            is >> UserMetric;
-       
-            // Send to the server a string of the user's choice.
-            Socket -> write(UserK + " " + UserMetric + '\n');
-
-            // Catch server errors and invalid arguments.
-            string ServerCheck = Socket -> read();
-            if (ServerCheck == "invalid_k_metric") {
-                cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
-            }
-            else if (ServerCheck == "invalid_k") {
-                cout << "invalid value for K" << endl;
-            }
-            else if (ServerCheck == "invalid_metric") {
-                cout << "invalid value for metric" << endl;
-            }
+            SettingKNN(this -> Socket);
             continue;
         }
 
@@ -147,6 +114,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
             // Receiving server message whether classifying complete or an error occured.
             string done = Socket -> read();
             cout << done << endl;
+            continue;
         }
 
         // Execute CommandDisplay.
@@ -171,6 +139,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
             string enter;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
+            continue;
         }
 
         // Execute CommandDownload.
@@ -189,11 +158,12 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 // Receiving a path from the user.
                 string PathDownload;
                 cin >> PathDownload; 
-                
-                // Validate given path.
-                string FullPath = PathDownload + "/ResultsFile_" + to_string(this -> SocketNum) + "_" + to_string(counter) + ".csv";
+                srand (time(nullptr));
+                int rand = std::rand();
+                string FullPath = PathDownload + "/ResultsFile_" + to_string(rand) + "_" + to_string(counter) + ".csv";
+                this -> counter++;
                 ofstream ResultsFile(FullPath, ios::out | ios::trunc);
-                cout << "Path is " << FullPath << endl; //--------------------------------------------------------------------------
+
                 bool ValidPath = ic.ValidFilePath(FullPath);
                 if (!ValidPath) {
                     cout << "invalid input\n";
@@ -203,19 +173,21 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 else {
                     Socket -> write("good\n");
                 }
-                // ----------------------------------------------------------------------------------------------------------------
-                //this -> FullPathOyler = FullPath;
-                //this -> PerfectPath =FullPath;
-                //ResultsFile.close();
-                //DownloadFile(&ResultsFile);
-                int numb = this -> SocketNum;
-                thread download(&ClientClass::DownloadFile, this -> Socket, FullPath);
-                // This will run the thread in the background and allow the program to continue executing
-                download.detach();
-                //DownloadFile(FullPath);
+                
+                //DownloadFile(this -> Socket, FullPath);
+                string row;
+                // Saving for the user the index and label.
+                row = Socket -> read(); 
+                do {
+                    ResultsFile << row << endl;
+                    row = Socket -> read();
+                } while (row != "Done.");
+
+                ResultsFile.close();
+                continue;
             }
         }
-    }
+    } while (input != "8");
 }
 
 // Display the menu options to the user.
@@ -245,7 +217,7 @@ bool ClientClass::InterfaceSendFile (string& path) {
 
     // The client will read "upload complete" or "invalid input".
     string response = Socket -> read(); 
-    cout << response << endl; // ----------------------------------------------------------------------------------------
+    cout << response << endl;
     if (response == "invalid input") {
         return false;
     }
@@ -277,37 +249,59 @@ bool ClientClass::InterfaceSendFile (string& path) {
     if (response == "invalid input") {
         return false;
     } else {
-        cout << response << endl; 
+        cout << "Upload complete." << endl; 
     }
     return true;
 }
 
-// Downloading the classification results into a local file.
-void ClientClass::DownloadFile(DefaultIO* Socket, string path){
-    mutex mtx;
-    // ------------------------------------------------------------------------------------------------------------------------------
-    //cout << "We are in downloadfile functionn\n";
-    unique_lock<mutex> lock(mtx);
-    //SocketIO sock(numb);
-    ofstream ResultsFile(path, ios::out | ios::trunc);
-    string row;
-    // Saving for the user the index and label.
-    row = Socket -> read(); 
-    do {
-        //cout << "We are in the do while looop\n";
-        ResultsFile << row << endl;
-        row = Socket -> read();
-        // We clean the whitspace in the last row
-        if (row == "Done.") {
-            cout << "We are in if done\n"; // ------------------------------------------------------------------------------
 
-            // need to handle last line as a whitespaces;
-        }
+void ClientClass::SettingKNN(DefaultIO* Socket){
+    string UserSettingInput;   
+    string UserMetric; 
+    string UserK;
 
-    } while (row != "Done.");
-    //ResultsFile.close();
-    //cout << "Finished the while done loop\n";
+    // Read current K and metric values from user and display them.
+    string CurrentK = Socket -> read();
+    string CurrentMetric = Socket -> read();
+    cout << "The current KNN parameters are: K = " << CurrentK << ", distance metric = " << CurrentMetric << endl;
+    
+    // Recive the new setting from the user.
+    cin.ignore();
+    getline(cin, UserSettingInput);
+    if (UserSettingInput == "\n"){
+        return;
+    }
+    // Split the information string <k> <metric>
+    istringstream is(UserSettingInput);
+    is >> UserK;
+    is >> UserMetric;
+    
+    // Send to the server a string of the user's choice.
+    Socket -> write(UserK + " " + UserMetric + '\n');
 
-    //this -> counter++;------------------------
-    lock.unlock();
+    // Catch server errors and invalid arguments.
+    string ServerCheck = Socket -> read();
+    if (ServerCheck == "invalid_k_metric") {
+        cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+    }
+    else if (ServerCheck == "invalid_k") {
+        cout << "invalid value for K" << endl;
+    }
+    else if (ServerCheck == "invalid_metric") {
+        cout << "invalid value for metric" << endl;
+    }
 }
+
+// // Downloading the classification results into a local file.
+// void ClientClass::DownloadFile(DefaultIO* Socket, string path){
+//     ofstream ResultsFile(path, ios::out | ios::trunc);
+//     string row;
+//     // Saving for the user the index and label.
+//     row = Socket -> read(); 
+//     do {
+//         ResultsFile << row << endl;
+//         row = Socket -> read();
+//     } while (row != "Done.");
+
+//     ResultsFile.close();
+// }
