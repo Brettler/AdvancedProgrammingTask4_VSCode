@@ -39,13 +39,10 @@ public:
     ClientClass(const char* BufferIPAddress, int ClientPort);
     // Functions:
     int run();
-    void SendMessages(DefaultIO* ServerSocket);
-    void ReceiveMessages(DefaultIO* ServerSocket);
+    void MenuInterface(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
     void SettingKNN(DefaultIO* Socket);
-    void static DownloadFile(DefaultIO* Socket, string path);
-    //void ClientInteraction(int ServerSocket, string output);
 };
 
 #endif // HEADER_CLIENTCLASS_H
