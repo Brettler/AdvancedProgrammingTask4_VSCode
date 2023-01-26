@@ -103,7 +103,7 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const {
     if (s.empty()) {
         cerr << "Error: File contain Empty Vector." << endl;
     }
-    for (int i = 0; i < s.size(); i++) {
+    for (unsigned int i = 0; i < s.size(); i++) {
         try {
             double feature = stod(s.at(i));
             vec.push_back(feature);
@@ -122,7 +122,7 @@ bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
         return false;
     }
 
-    for (int i = 0; i < s.size(); i++) {
+    for (unsigned int i = 0; i < s.size(); i++) {
         try {
             double feature = stod(s.at(i));
             vec.push_back(feature);

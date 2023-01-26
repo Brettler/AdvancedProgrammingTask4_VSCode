@@ -13,6 +13,8 @@
 #include <string>
 #include <cstdlib>
 #include <map>
+#include <stdexcept>
+
 using namespace std;
 
 class InputCheck {
