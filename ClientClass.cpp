@@ -136,7 +136,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 cin >> PathDownload; 
                 srand (time(nullptr));
                 int rand = std::rand();
-                string FullPath = PathDownload + "/ResultsFile_" + to_string(rand) + "_" + to_string(counter) + ".csv";
+                string FullPath = PathDownload + "/ResultsFile_" + to_string(rand) + "_" + to_string(counter) + ".txt";
                 this -> counter++;
                 ofstream ResultsFile(FullPath, ios::out | ios::trunc);
 
