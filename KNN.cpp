@@ -1,16 +1,15 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
+
 #include "KNN.h"
 
 // Constructor & Destructor:
 KNN::KNN(const int& KNum, const map<vector<double>, string>& FullData, const string& MetricType,
          const vector<double>& v) : k(KNum), DataMap(FullData), metric(MetricType), vec(v) {}
-
 KNN::~KNN() {};
 
 // Detect the most common label from the 'KNearestNeighbors' function. This will classify the sample we wish to predict.
 string KNN::predict() const {
-
     vector<string> KLabels = KNearestNeighbors();
     map<string, int> counts;
     for (const auto& label : KLabels) {
@@ -30,7 +29,6 @@ string KNN::predict() const {
 
 // Create a vector of strings containing the labels of the K nearest neighbors derived from the sorted map.
 vector<string> KNN::KNearestNeighbors() const {
-
     multimap<double, string> DistanceLabelMap = train();
     vector<string> KLabels;
     int count = 1;
@@ -48,7 +46,6 @@ vector<string> KNN::KNearestNeighbors() const {
 // Calculate the distance between all data vectors to the received vector according to the appropriate distance metric.
 // Insert all distance-label pairs into a multimap which will sort them by key.
 multimap<double, string> KNN::train() const {
-
     DistanceCalc dc;
     multimap<double, string> DistanceLabelMap;
     for (const auto& kv : DataMap) {

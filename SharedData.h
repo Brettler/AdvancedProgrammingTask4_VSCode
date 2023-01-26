@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <fstream>
 #include "DataImport.h"
-
 using namespace std;
 
 class SharedData {      
@@ -32,29 +31,20 @@ public:
     int counter = 1;
 
     SharedData(int ClientSockNum);
-
     ~SharedData();
-
     void SetClassifiedPath(string FilePath);
     string GetClassifiedPath();
-
     void SetUnclassifiedPath(string FilePath);
     string GetUnclassifiedPath();
-
     int GetK() const;
     void SetK(int NewK);
-
     string GetMetric() const;
     void SetMetric(string NewMetric);
-
     vector<string>* GetResultsVector() const;
     void SetResultsVector(string& label);
-
     DataImport* GetClassifiedData();
     void SetClassifiedData();
-
     DataImport* GetUnclassifiedData();
     void SetUnclassifiedData();
-
 };
 #endif //ADVANCEDPROGRAMMINGTASK4_SHAREDDATA_H

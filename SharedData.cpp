@@ -3,6 +3,7 @@
 
 #include "SharedData.h"
 
+// Constructor & Destructor:
 SharedData::SharedData(int ClientSockNum) {
     this -> CLISockNum = ClientSockNum;
     k = 5;
@@ -11,14 +12,7 @@ SharedData::SharedData(int ClientSockNum) {
     ClassifiedData = nullptr;
     UnclassifiedData = nullptr;
 }
-
 SharedData::~SharedData() {
-    // if (k != nullptr) {
-    //      delete k;
-    // }
-    // if (metric != nullptr) {
-    //      delete metric;
-    // }
     if (ClassifiedData != nullptr) {
         delete ClassifiedData;
     }
@@ -26,53 +20,64 @@ SharedData::~SharedData() {
         delete UnclassifiedData;
     }
     delete ResultsVector;
-
 }
 
-void SharedData::SetClassifiedPath(string FileClassifiePath) {
-    this -> ClassifiedPath = FileClassifiePath; 
-}
-
+// Get classified file path.
 string SharedData::GetClassifiedPath() {
     return this -> ClassifiedPath;
 }
 
-void SharedData::SetUnclassifiedPath(string FileUnclassifiedPath) {
-    this -> UnclassifiedPath = FileUnclassifiedPath; 
+// Set classified file path.
+void SharedData::SetClassifiedPath(string FileClassifiePath) {
+    this -> ClassifiedPath = FileClassifiePath; 
 }
 
+// Get unclassified file path.
 string SharedData::GetUnclassifiedPath() {
     return this -> UnclassifiedPath;
 }
 
-int SharedData::GetK() const{ 
+// Set unclassified file path.
+void SharedData::SetUnclassifiedPath(string FileUnclassifiedPath) {
+    this -> UnclassifiedPath = FileUnclassifiedPath; 
+}
+
+// Get K value.
+int SharedData::GetK() const { 
    return this -> k;
 }
 
+// Set K value.
 void SharedData::SetK(int NewK) {
     this -> k = NewK;
 }
 
-string SharedData::GetMetric() const{
+// Get metric value.
+string SharedData::GetMetric() const {
     return this -> metric;
 }
 
+// Set metric value.
 void SharedData::SetMetric(string NewMetric) {
     this -> metric = NewMetric;
 }
 
+// Get vector containing the classification results.
 vector<string>* SharedData::GetResultsVector() const {
     return this -> ResultsVector;
 }
 
-void SharedData::SetResultsVector(string& label){
+// Set vector containing the classification results.
+void SharedData::SetResultsVector(string& label) {
     this -> ResultsVector -> push_back(label);
 }
 
+// Get the classified data.
 DataImport* SharedData::GetClassifiedData() {
     return this -> ClassifiedData;
 }
 
+// Set the classified data using a DataImport object.
 void SharedData::SetClassifiedData() {
     if (ClassifiedData == nullptr) {
         ClassifiedData = new DataImport(ClassifiedPath); 
@@ -82,10 +87,12 @@ void SharedData::SetClassifiedData() {
     }
 }
 
+// Get the unclassified data.
 DataImport* SharedData::GetUnclassifiedData() {
     return this -> UnclassifiedData;
 }
 
+// Set the unclassified data using a DataImport object.
 void SharedData::SetUnclassifiedData() {
     if (UnclassifiedData == nullptr) {
         UnclassifiedData = new DataImport(UnclassifiedPath); 

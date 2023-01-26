@@ -1,8 +1,10 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
+
 #pragma once
 #ifndef HEADER_InputCheck
 #define HEADER_InputCheck
+
 #include <iostream>
 #include <sstream>
 #include <vector>
