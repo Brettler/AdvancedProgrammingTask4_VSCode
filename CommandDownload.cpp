@@ -1,9 +1,7 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
 
-
 #include "Command.h"
-
 
 CommandDownload::CommandDownload(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
@@ -12,47 +10,36 @@ CommandDownload::CommandDownload(DefaultIO* dio, SharedData* shared)
 
 CommandDownload::~CommandDownload(){}
 
-/*string Command::GetDescription() {
-    return this->description;
-}*/
-/*SharedData* Command::GetSharedData() {
-    return this->shared;
-}*/
-
 void CommandDownload::execute(SharedData* shared) {
     string index;
-    
-    try {
-        if(shared->GetClassifiedData()->GetDataMap().size() == 0) {
-            dio -> write("please upload data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    //cout << "Start execute command\n";
+
+    if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
     }
-
-    try {
-        if((*shared -> GetResultsVector()).size() == 0) {
-            dio -> write("please classify the data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    //cout << "Before the second if\n";
+    if ((*shared -> GetResultsVector()).size() == 0) {
         dio -> write("please classify the data\n");
         return;
     }
+    //cout << "Before writing good\n";
     dio -> write("good\n");
 
-
+    // if server read err_exp means the user gave invalid path.
+    // else the server will read "good" and we continue with the download
+    //cout << "before reading response from the server\n";
     if (dio -> read() == "err_exp") {
         return;
     }
-    cout << "loop: " <<endl;
+    //cout << "Before the loop\n";
     for (int i=0; i < (*shared -> GetResultsVector()).size(); i++) {
         index = to_string(i +1);
-        dio -> write(index +" "+(*shared -> GetResultsVector()).at(i) + "\n");
+        //cout << "write the inforamtion in the row that needed to be writen in the file\n";
+        dio -> write(index +"   "+(*shared -> GetResultsVector()).at(i) + "\n");
     }
     dio -> write("Done.\n");
+    //cout << "finished the for loop \n";
 }
 
 string CommandDownload::GetDescription() {

@@ -12,7 +12,7 @@
 #include <string.h>
 #include <cctype>
 #include <utility>
-
+#include <queue>
 #include "InputCheck.h"
 #include "DefaultIO.h"
 #include "CLI.h"
@@ -21,17 +21,17 @@
 using namespace std;
 
 class ServerClass {
-private:
-    // Port number.
-    const int ServerPort;
-    // DataMap will initialize when we create the ServerClass object.
-    //const map<vector<double>, string>& DataMap;
-
 public:
+    // Port number.
+    int sock;
+    const int ServerPort;
+    queue<int> ClientQueue;
+    vector<thread> ThreadPool;
     // Constructor:
     ServerClass(int ServerPort);
     // Functions:
-    void run() const;
+    void run();
+    void ThreadExecutor();
     string CreatResponseMessage(string ServerResponseMessage, char buffer[]) const;
 };
 #endif //ADVANCEDPROGRAMMINGTASK3_SERVERCLASS_H

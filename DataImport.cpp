@@ -4,7 +4,8 @@
 
 // Constructor & Destructor
 
-DataImport::DataImport(const string& DataName) {
+DataImport::DataImport(const string &DataName)
+{
     this -> DataName = DataName;
     file.open(DataName);
 };
@@ -116,7 +117,6 @@ bool DataImport::ReadUnclassifiedData(map<vector<double>, string> TrainMap){
         vector<double> SampleDouble;
 
         if (!ic.ValidStringToDouble(sample)){
-            //cout << " return false because ValidStringToDouble\n";
             return false;
         } else {
             // Convert the strings into doubles.
@@ -127,16 +127,13 @@ bool DataImport::ReadUnclassifiedData(map<vector<double>, string> TrainMap){
             cout << FirstVector.at(i) << " ";
         }
         cout << endl;
-        //cout << "TrainSetVector size is: " << FirstVector.size() << endl;
 
         // Compare the size of the first vector of the training set against all other vectors to make sure they're the same.
         // If they are all the same size, continue. Otherwise, terminate the program.
         bool ValidVectorSize = ic.ValidVectorSizeCheck(FirstVector, SampleDouble);
         if (!ValidVectorSize) {
-            //cout << " return false because ValidVectorSizeCheck\n";
             return false;
         }
-
         this -> UnclassifiedVectors.push_back(SampleDouble);
     }
     return true;

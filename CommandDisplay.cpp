@@ -12,36 +12,20 @@ CommandDisplay::CommandDisplay(DefaultIO* dio, SharedData* shared)
 
 CommandDisplay::~CommandDisplay(){}
 
-/*string Command::GetDescription() {
-    return this->description;
-}*/
-/*SharedData* Command::GetSharedData() {
-    return this->shared;
-}*/
-
 void CommandDisplay::execute(SharedData* shared) {
     string index;
-    try {
-        if(shared->GetClassifiedData()->GetDataMap().size() == 0) {
-            dio -> write("please upload data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
     }
-    try {
-        if((*shared -> GetResultsVector()).size() == 0) {
-            dio -> write("please classify the data\n");
-            return;
-        }
-    } catch (int& nullptr_ex) {
+    if ((*shared -> GetResultsVector()).size() == 0) {
         dio -> write("please classify the data\n");
         return;
-    } 
+    }
+
     for (int i=0; i < (*shared -> GetResultsVector()).size(); i++) {
         index = to_string(i +1);
-        dio -> write(index +" "+(*shared -> GetResultsVector()).at(i) + "\n");
+        dio -> write(index +"   "+(*shared -> GetResultsVector()).at(i) + "\n");
     }
      dio -> write("Done.\n");
 

@@ -3,7 +3,8 @@
 
 #include "SharedData.h"
 
-SharedData::SharedData() {
+SharedData::SharedData(int ClientSockNum) {
+    this -> CLISockNum = ClientSockNum;
     k = 5;
     metric = "AUC";
     ResultsVector = new vector<string>;
@@ -24,9 +25,8 @@ SharedData::~SharedData() {
     if (UnclassifiedData != nullptr) {
         delete UnclassifiedData;
     }
+    delete ResultsVector;
 
-    delete UnclassifiedData;
-    
 }
 
 void SharedData::SetClassifiedPath(string FileClassifiePath) {
@@ -49,7 +49,7 @@ int SharedData::GetK() const{
    return this -> k;
 }
 
-void SharedData::SetK(int& NewK) {
+void SharedData::SetK(int NewK) {
     this -> k = NewK;
 }
 
@@ -57,7 +57,7 @@ string SharedData::GetMetric() const{
     return this -> metric;
 }
 
-void SharedData::SetMetric(string& NewMetric) {
+void SharedData::SetMetric(string NewMetric) {
     this -> metric = NewMetric;
 }
 
@@ -70,15 +70,29 @@ void SharedData::SetResultsVector(string& label){
 }
 
 DataImport* SharedData::GetClassifiedData() {
-    if (ClassifiedData == nullptr) {
-        ClassifiedData = new DataImport(ClassifiedPath); 
-    }
     return this -> ClassifiedData;
 }
 
+void SharedData::SetClassifiedData() {
+    if (ClassifiedData == nullptr) {
+        ClassifiedData = new DataImport(ClassifiedPath); 
+    } else {
+        delete ClassifiedData;
+        ClassifiedData = new DataImport(ClassifiedPath);
+    }
+}
+
 DataImport* SharedData::GetUnclassifiedData() {
+    return this -> UnclassifiedData;
+}
+
+void SharedData::SetUnclassifiedData() {
     if (UnclassifiedData == nullptr) {
         UnclassifiedData = new DataImport(UnclassifiedPath); 
+    } else {
+        delete UnclassifiedData;
+        delete ResultsVector;
+        UnclassifiedData = new DataImport(UnclassifiedPath);
+        ResultsVector = new vector<string>;
     }
-    return this -> UnclassifiedData;
 }

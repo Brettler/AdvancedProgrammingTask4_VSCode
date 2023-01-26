@@ -34,7 +34,7 @@ class CLI {
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
 public:
-    CLI(DefaultIO* dio);
+    CLI(DefaultIO* dio, int ClientSockNum);
     void start();
     virtual ~CLI();
 };
