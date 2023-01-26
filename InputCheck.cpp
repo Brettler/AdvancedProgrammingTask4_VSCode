@@ -1,5 +1,6 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
+
 #include "InputCheck.h"
 
 // Constructor & Destructor:
@@ -53,7 +54,7 @@ int InputCheck::ValidPortCheck(const string& PortString) const {
         }
         return PortInt;
     }
-    catch(exception& invalid_port_number) {
+    catch (exception& invalid_port_number) {
         cerr << "Error: invalid port number, must be an integer." << endl;
         exit(1);
     }
@@ -99,9 +100,8 @@ void InputCheck::ValidIPv4Address(const string& ip) const {
 vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
 
     vector<double> vec;
-    if (s.empty()){
+    if (s.empty()) {
         cerr << "Error: File contain Empty Vector." << endl;
-        //exit(1);
     }
     for (int i = 0; i < s.size(); i++) {
         try {
@@ -110,7 +110,6 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
         }
         catch (const invalid_argument& e) {
             cerr << "Error: File contain invalid data." << endl;
-            //exit(1);
         }
     }
     return vec;
@@ -118,11 +117,11 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
 
 // Convert a vector of strings into a vector of doubles.
 bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
-
     vector<double> vec;
     if (s.empty()){
         return false;
     }
+
     for (int i = 0; i < s.size(); i++) {
         try {
             double feature = stod(s.at(i));
@@ -145,10 +144,9 @@ bool InputCheck::ValidVectorSizeCheck(const vector<double>& a, const vector<doub
 
 // Convert string to int.
 int InputCheck::ValidKNumber(const string& k) const{
-
     try {
         const char* CharArrayK = k.c_str();
-        for(int i = 0; i < k.size(); i++) {
+        for (int i = 0; i < k.size(); i++) {
             if (!isdigit(CharArrayK[i])) {
                 return -1;
             }
@@ -161,7 +159,7 @@ int InputCheck::ValidKNumber(const string& k) const{
             return -1;
         }
     }
-    catch(exception& invalid_argument) {
+    catch (exception& invalid_argument) {
         return -1;
     }
 }
@@ -174,7 +172,7 @@ bool InputCheck::ValidFilePath(string DataName) {
             return false;
         }
     }
-    catch(exception& damaged_file) {
+    catch (exception& damaged_file) {
         return false;
     }
     return true;
@@ -217,15 +215,12 @@ bool InputCheck::ValidLabel(const string& label) const {
     if (label.find_first_not_of(" \t\n\v\f\r") == std::string::npos) {
         return false;
     }
-    
     return true;
 }
 
 // Check if the file is empty.
 bool InputCheck::EmptyFileCheck(const map<vector<double>, string> &DataMap) const {
-
     if (DataMap.empty()) {
-        //cerr << "Error: The file is empty." << endl;
         return false;
     }
     return true;
@@ -233,11 +228,9 @@ bool InputCheck::EmptyFileCheck(const map<vector<double>, string> &DataMap) cons
 
 // Check if a valid metric type was received.
 bool InputCheck::ValidDistanceMetric(const string &metric) const {
-
     if (metric == "AUC" || metric == "MAN" || metric == "CHB" || metric == "CAN" || metric == "MIN") {
         return true;
     } else {
         return false;
     }
 }
-

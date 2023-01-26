@@ -3,6 +3,9 @@
 
 #include "DefaultIO.h"
 
-DefaultIO::~DefaultIO(){};
-string DefaultIO::read(){};
-void DefaultIO::write(string information){};
+// Constructor & Destructor:
+DefaultIO::~DefaultIO() {};
+string DefaultIO::read() {};
+
+// Methods:
+void DefaultIO::write(string information) {};

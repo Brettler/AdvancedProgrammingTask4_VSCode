@@ -22,15 +22,15 @@ protected:
     ofstream output;
     ifstream input;
 public:
-    virtual string read()=0;
-    virtual void write(string text)=0;
+    virtual string read() = 0;
+    virtual void write(string text) = 0;
     virtual ~DefaultIO();
 };
 
-class SocketIO: public DefaultIO{
+
+class SocketIO: public DefaultIO {
     int ClientSocket;
 public:
-
     explicit SocketIO(int ClientID);
     ~SocketIO();
     string read() override;

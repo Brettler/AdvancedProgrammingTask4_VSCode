@@ -4,6 +4,7 @@
 #pragma once
 #ifndef HEADER_KNN
 #define HEADER_KNN
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -22,7 +23,6 @@ private:
     const string& metric;
     const vector<double>& vec;
     const map<vector<double>, string>& DataMap;
-
 public:
     // Constructor & Destructor:
     KNN(const int& KNum, const map<vector<double>, string>& FullData, const string& MetricType,
