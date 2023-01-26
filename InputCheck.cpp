@@ -82,7 +82,7 @@ void InputCheck::ValidIPv4Address(const string& ip) const {
     for (int i = 0; i < VecOctets.size(); ++i) {
         int OctetInt;
         try {
-            OctetInt = std::stoi(VecOctets[i]);
+            OctetInt = stoi(VecOctets[i]);
             if (OctetInt < 0 || OctetInt > 255) {
                 cerr << "Error: invalid IP address, each octet must be within the range 0-255." << endl;
                 exit(1);
@@ -105,7 +105,7 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const {
     }
     for (unsigned int i = 0; i < s.size(); i++) {
         try {
-            double feature = std::strtod(s.at(i).c_str(), nullptr);
+            double feature = stod(s.at(i));
             vec.push_back(feature);
         }
         catch (const invalid_argument& e) {
@@ -124,8 +124,8 @@ bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
 
     for (unsigned int i = 0; i < s.size(); i++) {
         try {
-            double feature = std::strtod(s.at(i).c_str(), nullptr);
-            vec.push_back(feature); 
+            double feature = stod(s.at(i));
+            vec.push_back(feature);
         }
         catch (const invalid_argument& e) {
             return false;
@@ -167,7 +167,7 @@ int InputCheck::ValidKNumber(const string& k) const {
 // Check if the file exists and is not damaged.
 bool InputCheck::ValidFilePath(string DataName) {
     try {
-        ifstream file(DataName.c_str());
+        ifstream file(DataName);
         if (!file.good() || !file.is_open()) {
             return false;
         }

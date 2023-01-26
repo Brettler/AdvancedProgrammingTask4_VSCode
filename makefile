@@ -24,61 +24,61 @@ client.out: $(OBJS1)
 	$(CC) -g $(OBJS1) -o $(OUT1) $(LFLAGS)
 
 DistanceCalc.o: DistanceCalc.cpp
-	$(CC) $(FLAGS) DistanceCalc.cpp -std=c11
+	$(CC) $(FLAGS) DistanceCalc.cpp -std=c++11
 
 InputCheck.o: InputCheck.cpp
-	$(CC) $(FLAGS) InputCheck.cpp -std=c11
+	$(CC) $(FLAGS) InputCheck.cpp -std=c++11
 
 DataImport.o: DataImport.cpp
-	$(CC) $(FLAGS) DataImport.cpp -std=c11
+	$(CC) $(FLAGS) DataImport.cpp -std=c++11
 
 KNN.o: KNN.cpp
-	$(CC) $(FLAGS) KNN.cpp -std=c11
+	$(CC) $(FLAGS) KNN.cpp -std=c++11
 
 SharedData.o: SharedData.cpp
-	$(CC) $(FLAGS) SharedData.cpp -std=c11
+	$(CC) $(FLAGS) SharedData.cpp -std=c++11
 
 DefaultIO.o: DefaultIO.cpp
-	$(CC) $(FLAGS) DefaultIO.cpp -std=c11
+	$(CC) $(FLAGS) DefaultIO.cpp -std=c++11
 
 SocketIO.o: SocketIO.cpp
-	$(CC) $(FLAGS) SocketIO.cpp -std=c11
+	$(CC) $(FLAGS) SocketIO.cpp -std=c++11
 
 Command.o: Command.cpp
-	$(CC) $(FLAGS) Command.cpp -std=c11
+	$(CC) $(FLAGS) Command.cpp -std=c++11
 
 CommandUploadCSV.o: CommandUploadCSV.cpp
-	$(CC) $(FLAGS) CommandUploadCSV.cpp -std=c11
+	$(CC) $(FLAGS) CommandUploadCSV.cpp -std=c++11
 
 CommandSettingsKNN.o: CommandSettingsKNN.cpp
-	$(CC) $(FLAGS) CommandSettingsKNN.cpp -std=c11
+	$(CC) $(FLAGS) CommandSettingsKNN.cpp -std=c++11
 
 CommandClassify.o: CommandClassify.cpp
-	$(CC) $(FLAGS) CommandClassify.cpp -std=c11
+	$(CC) $(FLAGS) CommandClassify.cpp -std=c++11
 
 CommandDisplay.o: CommandDisplay.cpp
-	$(CC) $(FLAGS) CommandDisplay.cpp -std=c11
+	$(CC) $(FLAGS) CommandDisplay.cpp -std=c++11
 
 CommandDownload.o: CommandDownload.cpp
-	$(CC) $(FLAGS) CommandDownload.cpp -std=c11
+	$(CC) $(FLAGS) CommandDownload.cpp -std=c++11
 
 CommandExit.o: CommandExit.cpp
-	$(CC) $(FLAGS) CommandExit.cpp -std=c11
+	$(CC) $(FLAGS) CommandExit.cpp -std=c++11
 
 CLI.o: CLI.cpp
-	$(CC) $(FLAGS) CLI.cpp -std=c11
+	$(CC) $(FLAGS) CLI.cpp -std=c++11
 
 Server.o: Server.cpp
-	$(CC) $(FLAGS) Server.cpp -std=c11
+	$(CC) $(FLAGS) Server.cpp -std=c++11
 
 ServerClass.o: ServerClass.cpp
-	$(CC) $(FLAGS) ServerClass.cpp -std=c11
+	$(CC) $(FLAGS) ServerClass.cpp -std=c++11
 
 Client.o: Client.cpp
-	$(CC) $(FLAGS) Client.cpp -std=c11
+	$(CC) $(FLAGS) Client.cpp -std=c++11
 
 ClientClass.o: ClientClass.cpp
-	$(CC) $(FLAGS) ClientClass.cpp -std=c11
+	$(CC) $(FLAGS) ClientClass.cpp -std=c++11
 
 clean:
 	rm -f $(OBJS) $(OUT)
