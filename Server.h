@@ -3,6 +3,7 @@
 
 #ifndef ADVANCEDPROGRAMMINGTASK3_SERVER_H
 #define ADVANCEDPROGRAMMINGTASK3_SERVER_H
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -16,10 +17,6 @@
 #include <fstream>
 #include <thread>
 #include "ServerClass.h"
-
-
-
-
-
 using namespace std;
+
 #endif //ADVANCEDPROGRAMMINGTASK3_SERVER_H

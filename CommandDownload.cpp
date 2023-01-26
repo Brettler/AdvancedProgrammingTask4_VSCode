@@ -2,18 +2,20 @@
 // Liad Brettler 318517182
 
 #include "Command.h"
-
+// ---------------------------------------------------------------------------------------------------------------------------
+// Constructor & Destructor:
 CommandDownload::CommandDownload(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
             this -> description = "5. download results\n";
         }
+CommandDownload::~CommandDownload() {}
 
-CommandDownload::~CommandDownload(){}
-
+// Download the classification results into a file locally.
 void CommandDownload::execute(SharedData* shared) {
     string index;
     //cout << "Start execute command\n";
 
+    // If the data has yet to be uploaded or classified, return.
     if (shared -> ClassifiedData == nullptr) {
         dio -> write("please upload data\n");
         return;
@@ -32,16 +34,19 @@ void CommandDownload::execute(SharedData* shared) {
     if (dio -> read() == "err_exp") {
         return;
     }
+
     //cout << "Before the loop\n";
+    // Insert the classification results into a file in the following format: <index> <label>.
     for (int i=0; i < (*shared -> GetResultsVector()).size(); i++) {
-        index = to_string(i +1);
+        index = to_string(i + 1);
         //cout << "write the inforamtion in the row that needed to be writen in the file\n";
-        dio -> write(index +"   "+(*shared -> GetResultsVector()).at(i) + "\n");
+        dio -> write(index + "   " + (*shared -> GetResultsVector()).at(i) + "\n");
     }
     dio -> write("Done.\n");
     //cout << "finished the for loop \n";
 }
 
+// Command description.
 string CommandDownload::GetDescription() {
     return this -> description;
 }
