@@ -3,6 +3,7 @@
 
 #ifndef ADVANCEDPROGRAMMINGTASK3_SERVERCLASS_H
 #define ADVANCEDPROGRAMMINGTASK3_SERVERCLASS_H
+
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -16,14 +17,11 @@
 #include "InputCheck.h"
 #include "DefaultIO.h"
 #include "CLI.h"
-
-
 using namespace std;
 
 class ServerClass {
 public:
-    // Port number.
-    int sock;
+    int sock; // Port number.
     const int ServerPort;
     queue<int> ClientQueue;
     vector<thread> ThreadPool;

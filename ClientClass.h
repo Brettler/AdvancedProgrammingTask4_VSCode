@@ -3,6 +3,7 @@
 
 #ifndef HEADER_CLIENTCLASS_H
 #define HEADER_CLIENTCLASS_H
+
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -19,9 +20,6 @@
 #include <mutex>
 #include "InputCheck.h"
 #include "DefaultIO.h"
-
-
-
 using namespace std;
 
 class ClientClass {
@@ -38,6 +36,7 @@ private:
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
+    // Destructor? ----------------------------------------------------------------------------------------------------
     // Functions:
     int run();
     void SendMessages(DefaultIO* ServerSocket);

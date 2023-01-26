@@ -1,8 +1,9 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
+
 #include "ClientClass.h"
 
-// Constructor
+// Constructor:
 ClientClass::ClientClass(const char* BufferIPAddress, int ClientPort) {
     this -> BufferIPAddress = BufferIPAddress;
     this -> ClientPort = ClientPort;
@@ -36,7 +37,7 @@ int ClientClass::run() {
 }
 
 
-
+// ----------------------------------------------------------------------------------------------------------------
 //  void ClientClass::SendMessages(DefaultIO* ServerSocket) {
 //         this -> Socket = ServerSocket;
 //      //unique_lock<mutex> lock(mtx);
@@ -62,94 +63,97 @@ int ClientClass::run() {
 void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     string input = "0";
-    string respond ="0";
-    while(input != "8"){
-  
-        PrintMenu();
-        // Getting user's choice which command he wants.
-        cin >> input;
-        //cout << "Check input after doing complicated if: " << input << endl;
-        Socket -> write(input+'\n');
+    string respond = "0";
 
-        // Execute command uploadCSVV
-        if (input == "1"){
-            
+    // Command executer.
+    while (input != "8") {
+        PrintMenu();
+        // Receiving user's command choice.
+        cin >> input;
+        //cout << "Check input after doing complicated if: " << input << endl; ----------------------------------------------
+        Socket -> write(input +'\n');
+
+        // Execute command UploadCSV.
+        if (input == "1") {
             respond = Socket -> read();
 
-            // if the respond is invalid we want to print again the menu
+            // Display massage for invalid input.
             if (respond == "invalid input") {
                 cout << respond << endl;
                 continue;
             }
-            // "Please upload your local train CSV file.\n"
+
+            // Otherwise, the response message will be: "Please upload your local train CSV file.\n"
             cout << respond << endl; 
             string path;
             cin >> path;
+
+            // Messages server to return to the options menu if invalid input.
             bool ValidFilePath = InCheck.ValidFilePath(path);
-   
             if (!ValidFilePath) {
-                // Send to the server to go back the the menu;
                 Socket -> write("invalid input\n");
                 cout << "invalid input\n";
                 continue;
             }
             bool ValidFilesContent = InterfaceSendFile(path);
-
             if (!ValidFilesContent) {
                 Socket -> write("invalid input\n");
                 cout << "invalid input\n";
                 continue;
             }
         }
+
+        // Execute CommandSettingsKNN.
         if (input == "2") {
-            string UserSettingInput ="0";   
+            string UserSettingInput = "0";   
             string UserMetric = "0"; 
             string UserK = "0";
-            // Read corrent k from the user.
-            string CorrentK = Socket -> read();
-            cout << CorrentK << endl;
-            // Read corrent mertic from the user.
-            string CorrentMetric = Socket -> read();
-            cout << CorrentMetric << endl;
-            cout << "The current KNN parameters are: K = " << CorrentK << ", distance metric = " << CorrentMetric << endl;
+
+            // Read current K and metric values from user and display them.
+            string CurrentK = Socket -> read();
+            cout << CurrentK << endl;
+            string CurrentMetric = Socket -> read();
+            cout << CurrentMetric << endl;
+            cout << "The current KNN parameters are: K = " << CurrentK << ", distance metric = " << CurrentMetric << endl;
             
-            // Recive the new setting from the user
+            // Recive the new setting from the user.
             cin.ignore();
             getline(cin, UserSettingInput);
             
-            // Split the string of information <k> <metric>
+            // Split the information string <k> <metric>
             istringstream is(UserSettingInput);
             is >> UserK;
             is >> UserMetric;
        
-            // Send to the server user choice as one string.
-            Socket -> write(UserK+ " " +UserMetric+'\n');
+            // Send to the server a string of the user's choice.
+            Socket -> write(UserK + " " + UserMetric + '\n');
 
-            // Catch errors from the server.
-            // Catch if both of the arguments are invalid
+            // Catch server errors and invalid arguments.
             string ServerCheck = Socket -> read();
-            if (ServerCheck == "invalid_k_metric"){
+            if (ServerCheck == "invalid_k_metric") {
                 cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
             }
-            else if (ServerCheck == "invalid_k"){
+            else if (ServerCheck == "invalid_k") {
                 cout << "invalid value for K" << endl;
             }
-            else if (ServerCheck == "invalid_metric"){
+            else if (ServerCheck == "invalid_metric") {
                 cout << "invalid value for metric" << endl;
             }
             continue;
         }
 
-        // Execute command 3 aka callasify the data
+        // Execute CommandClassify.
         if (input == "3") {
-            // Reading from the server if the clasifying was successfull complete or not
+            // Receiving server message whether classifying complete or an error occured.
             string done = Socket -> read();
             cout << done << endl;
         }
 
-        // Execute command 4 aka display the results to the user
+        // Execute CommandDisplay.
         if (input == "4") {
             string label = Socket -> read();
+
+            // Verify the appropriate actions were taken prior.
             if (label == "please classify the data" || label == "please upload data") {
                 cout << label << endl;
                 continue;
@@ -157,33 +161,39 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 cout << label << endl;
             }
             
-            // Printing for the user the index and label. 
+            // Displaying to the user the index and adjacent to the classification label. 
             while (label != "Done.") {
                 label = Socket -> read();      
                 cout << label << endl;
             }
-            // Waiting for the user to press enter, when he does we continue
+
+            // Waiting for the user to press enter, when he does we continue.
             string enter;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
         }
 
-        // Execute command 5 aka download.
+        // Execute CommandDownload.
         if (input == "5") {
             string StatusReport = Socket -> read();
+
+            // Verify the appropriate actions were taken prior.
             if (StatusReport == "please classify the data" || StatusReport == "please upload data") {
                 cout << StatusReport << endl;
                 continue;
+
+            // Begin the downloading process once the action is cleared for takeoff.
             } else {
                 InputCheck ic;
-                // Getting path from the user
+
+                // Receiving a path from the user.
                 string PathDownload;
                 cin >> PathDownload; 
                 
-                string FullPath = PathDownload + "/ResultsFile_" +to_string(this-> SocketNum) + "_" + to_string(counter) +".csv";
+                // Validate given path.
+                string FullPath = PathDownload + "/ResultsFile_" + to_string(this -> SocketNum) + "_" + to_string(counter) + ".csv";
                 ofstream ResultsFile(FullPath, ios::out | ios::trunc);
-                cout << "Path is " << FullPath << endl;
-                // Check if valid path given
+                cout << "Path is " << FullPath << endl; //--------------------------------------------------------------------------
                 bool ValidPath = ic.ValidFilePath(FullPath);
                 if (!ValidPath) {
                     cout << "invalid input\n";
@@ -193,7 +203,7 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 else {
                     Socket -> write("good\n");
                 }
-
+                // ----------------------------------------------------------------------------------------------------------------
                 //this -> FullPathOyler = FullPath;
                 //this -> PerfectPath =FullPath;
                 ResultsFile.close();
@@ -202,78 +212,79 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 // This will run the thread in the background and allow the program to continue executing
                 //download.detach();
                 DownloadFile(FullPath);
-               
-                
             }
         }
     }
 }
 
-void ClientClass::PrintMenu(){
-    bool FlagFinishReading=false;
-    while(!FlagFinishReading){
-        // read string line
+// Display the menu options to the user.
+void ClientClass::PrintMenu() {
+    bool FlagFinishReading = false;
+    while (!FlagFinishReading) {
         string RowInMenu = Socket -> read();
         cout << RowInMenu << endl;
-        if(RowInMenu == "8. exit")
+        if (RowInMenu == "8. exit")
             FlagFinishReading = true;
     }
 }
 
+// Sending the file contents to the server.
 bool ClientClass::InterfaceSendFile (string& path) {
     string row;
     ifstream FileCSV(path);
-    // Reading each row in the file
+
+    // Reading each row of the file individually.
     while (getline(FileCSV, row)){
         Socket->write(row + "\n");
-
     }
 
-    // We will add 'end-of-message' marker to know when we finished reading the messege
-    Socket->write("//EOM_MARKER\n");
+    // Adding 'end-of-message' marker to know when we have reached the end of the message.
+    Socket -> write("//EOM_MARKER\n");
     FileCSV.close();
 
-    // the client will read: upload complete / invalid input
-    string response = Socket->read(); 
-    cout << response << endl;
+    // The client will read "upload complete" or "invalid input".
+    string response = Socket -> read(); 
+    cout << response << endl; // ----------------------------------------------------------------------------------------
     if (response == "invalid input") {
         return false;
     }
     
-    // the client will read: "Please enter the path to the test file:
+    // The client will read: "Please enter the path to the test file".
     response = Socket -> read(); 
     cout << response << endl;
     string TestPath;
     cin >> TestPath;
-    // Check if the path to the test file is valid, if not valaid we will return false;
+
+    // Check if test file path is valid.
     bool ValidFilePath = InCheck.ValidFilePath(TestPath);
-    if (!ValidFilePath){
+    if (!ValidFilePath) {
         return false;
     }
 
-    // Send the contents of the file to the server, row by row
+    // Send the contents of the file to the server one row at a time.
     ifstream TestCSV(TestPath);
-    while (getline(TestCSV, row)){
-        Socket->write(row + "\n");
-
+    while (getline(TestCSV, row)) {
+        Socket -> write(row + "\n");
     }
-    // We will add 'end-of-message' marker to know when we finished reading the messege
-    Socket->write("//EOM_MARKER\n");
+
+    // Adding 'end-of-message' marker to know when we have reached the end of the message.
+    Socket -> write("//EOM_MARKER\n");
     TestCSV.close();
 
-    // the client will read: upload complete / invalid input
-    response = Socket->read(); 
+    // The client will read "upload complete" or "invalid input".
+    response = Socket -> read(); 
     if (response == "invalid input") {
         return false;
     } else {
-        // Upload Complete
         cout << response << endl; 
     }
     return true;
 }
 
+// Downloading the classification results into a local file.
 void ClientClass::DownloadFile(string path){
     
+    // ------------------------------------------------------------------------------------------------------------------------------
     //cout << "We are in downloadfile functionn\n";
     //unique_lock<mutex> lock(mtx);
     ofstream ResultsFile(path, ios::out | ios::trunc);
@@ -286,11 +297,12 @@ void ClientClass::DownloadFile(string path){
         row = Socket -> read();
         // We clean the whitspace in the last row
         if (row == "Done.") {
-            cout << "We are in if done\n";
+            cout << "We are in if done\n"; // ------------------------------------------------------------------------------
 
-            // need to handl last line as a whitespaces;
+            // need to handle last line as a whitespaces;
         }
-    } while(row != "Done.");
+
+    } while (row != "Done.");
     //ResultsFile.close();
     //cout << "Finished the while done loop\n";
 

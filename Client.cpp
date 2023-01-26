@@ -1,7 +1,7 @@
 // Eden Berman 318530474
 // Liad Brettler 318517182
-#include "Client.h"
 
+#include "Client.h"
 
 // Command line: ./client.out <IP_Address> <Port_number>
 int main(int argc, char* argv[]) {
@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
     int SocketNumber = client.run();
 
     SocketIO ServerSocketIO(SocketNumber);
+    // -------------------------------------------------------------------------------------------------------------
     // Using functor to initialize the thread.
     // Functor taking object and the variables of this object and send it to the Thread constructor.
     // thread SendThread([&client, &ServerSocketIO]()
@@ -31,10 +32,10 @@ int main(int argc, char* argv[]) {
     //thread ReceiveThread(client.ReceiveMessages, SocketNumber, outputFile);
     thread ReceiveThread([&client, &ServerSocketIO]()
                         { client.ReceiveMessages(&ServerSocketIO); });
-    //SendThread.join();
+    // -------------------------------------------------------------------------------------------------------------
+    //SendThread.join(); 
     ReceiveThread.join();
     close(SocketNumber);
     cout<<"Client Closed"<<endl;
-
 
 }
