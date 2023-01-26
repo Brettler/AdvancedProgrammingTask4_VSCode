@@ -37,10 +37,9 @@ void CLI::start() {
         for (int i = 0; i < CommandsVec.size(); ++i) {
             dio -> write(CommandsVec[i] -> GetDescription());
         }
-  
-        string ClientRespond = dio -> read();
 
         // If UserChoise is not a numeric value, the ValidKNumber method will return -1.
+        string ClientRespond = dio -> read();
         UserChoise = ic.ValidKNumber(ClientRespond.c_str());
         if (count(ValidChoices.begin(), ValidChoices.end(), UserChoise) == 0) {
             dio -> write("invalid input\n") ;
@@ -48,12 +47,10 @@ void CLI::start() {
         }
 
         // Executing commands:
-        // Command 8 is the exit however it is the 5th element in the vector
+        // Command 8 exits the program, however it is the fifth element in the vector.
         if (UserChoise == 8) {
             CommandsVec.at(5) -> execute(this -> shared);
-        }
-        // Download command need to be in a diffrent thread
-        else {
+        } else {
             CommandsVec.at(UserChoise - 1) -> execute(this -> shared);    
         }
     }
@@ -62,7 +59,7 @@ void CLI::start() {
 // Destructor:
 CLI::~CLI() {
     delete shared;
-    for (size_t i = 0;i < CommandsVec.size(); i++) {
+    for (size_t i = 0; i < CommandsVec.size(); i++) {
         delete CommandsVec[i];
     }
 }

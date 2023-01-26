@@ -22,18 +22,11 @@ int main(int argc, char* argv[]) {
     // Start the client and execute its functions.
     ClientClass client(BufferIPAddress, ClientPort);
     int SocketNumber = client.run();
-
     SocketIO ServerSocketIO(SocketNumber);
-    // -------------------------------------------------------------------------------------------------------------
-    // Using functor to initialize the thread.
-    // Functor taking object and the variables of this object and send it to the Thread constructor.
-    // thread SendThread([&client, &ServerSocketIO]()
-    //                     { client.SendMessages(&ServerSocketIO); });
-    //thread ReceiveThread(client.ReceiveMessages, SocketNumber, outputFile);
+
+    // Using functor to initialize the client's thread.
     thread ReceiveThread([&client, &ServerSocketIO]()
                         { client.ReceiveMessages(&ServerSocketIO); });
-    // -------------------------------------------------------------------------------------------------------------
-    //SendThread.join(); 
     ReceiveThread.join();
     close(SocketNumber);
 }

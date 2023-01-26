@@ -13,7 +13,7 @@ bool InputCheck::ValidDoubleVector(const string& input) const {
     bool FlagDecimalPointReached = false;
     const char* CharArrayValues = input.c_str();
 
-    for (int i = 1; i < input.size(); i++){
+    for (int i = 1; i < input.size(); i++) {
         if (!isdigit(CharArrayValues[i]) && CharArrayValues[i] != '.') {
             FlagValidChars = false;
             break;
@@ -97,7 +97,7 @@ void InputCheck::ValidIPv4Address(const string& ip) const {
 
 // Convert a vector of strings into a vector of doubles.
 // When we call this method the vector is for sure pure doubls
-vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
+vector<double> InputCheck::StringToDouble(const vector<string>& s) const {
 
     vector<double> vec;
     if (s.empty()) {
@@ -118,7 +118,7 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const{
 // Convert a vector of strings into a vector of doubles.
 bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
     vector<double> vec;
-    if (s.empty()){
+    if (s.empty()) {
         return false;
     }
 
@@ -143,7 +143,7 @@ bool InputCheck::ValidVectorSizeCheck(const vector<double>& a, const vector<doub
 }
 
 // Convert string to int.
-int InputCheck::ValidKNumber(const string& k) const{
+int InputCheck::ValidKNumber(const string& k) const {
     try {
         const char* CharArrayK = k.c_str();
         for (int i = 0; i < k.size(); i++) {
