@@ -4,6 +4,7 @@
 #pragma once
 #ifndef HEADER_DistanceCalc
 #define HEADER_DistanceCalc
+
 #include <iostream>
 #include <sstream>
 #include <vector>
