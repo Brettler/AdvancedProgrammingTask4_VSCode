@@ -34,30 +34,7 @@ int ClientClass::run() {
     return sock;
 }
 
-
-// ----------------------------------------------------------------------------------------------------------------
-//  void ClientClass::SendMessages(DefaultIO* ServerSocket) {
-//         this -> Socket = ServerSocket;
-//      //unique_lock<mutex> lock(mtx);
-//         string row;
-//         ofstream ResultsFile(FullPathOyler, ios::out | ios::trunc);
-//         // Saving for the user the index and label.
-//         row = Socket -> read(); 
-//         do {
-//             ResultsFile << row << endl;
-//             row = Socket -> read();
-//             // We clean the whitspace in the last row
-//             if (row == "Done.") {
-//                 // need to handl last line as a whitespaces;
-//             }
-//         } while(row != "Done.");
-//         //ResultsFile.close();
-//         this -> counter++;
-//         //lock.unlock();
-//  }
-
-
-
+// Execute commands according to user inputs.
 void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     string input = "0";
@@ -69,10 +46,9 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
         PrintMenu();
         // Receiving user's command choice.
         cin >> input;
-        //cout << "Check input after doing complicated if: " << input << endl; ----------------------------------------------
         Socket -> write(input +'\n');
-        // Execute command UploadCSV
-   
+
+        // Execute command UploadCSV.
         if (input == "1") {
             respond = Socket -> read();
 
@@ -173,10 +149,8 @@ void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
                 else {
                     Socket -> write("good\n");
                 }
-                
-                //DownloadFile(this -> Socket, FullPath);
                 string row;
-                // Saving for the user the index and label.
+                // Saving the index and label for user's file.
                 row = Socket -> read(); 
                 do {
                     ResultsFile << row << endl;
@@ -254,8 +228,8 @@ bool ClientClass::InterfaceSendFile (string& path) {
     return true;
 }
 
-
-void ClientClass::SettingKNN(DefaultIO* Socket){
+// Algorithm settings method for K and metric values.
+void ClientClass::SettingKNN(DefaultIO* Socket) {
     string UserSettingInput;   
     string UserMetric; 
     string UserK;
@@ -268,7 +242,7 @@ void ClientClass::SettingKNN(DefaultIO* Socket){
     // Recive the new setting from the user.
     cin.ignore();
     getline(cin, UserSettingInput);
-    if (UserSettingInput == "\n"){
+    if (UserSettingInput == "\n") {
         return;
     }
     // Split the information string <k> <metric>
@@ -282,7 +256,7 @@ void ClientClass::SettingKNN(DefaultIO* Socket){
     // Catch server errors and invalid arguments.
     string ServerCheck = Socket -> read();
     if (ServerCheck == "invalid_k_metric") {
-        cout << "invalid value for K" << endl << "invalid value for metric" <<endl;
+        cout << "invalid value for K" << endl << "invalid value for metric" << endl;
     }
     else if (ServerCheck == "invalid_k") {
         cout << "invalid value for K" << endl;
@@ -291,17 +265,3 @@ void ClientClass::SettingKNN(DefaultIO* Socket){
         cout << "invalid value for metric" << endl;
     }
 }
-
-// // Downloading the classification results into a local file.
-// void ClientClass::DownloadFile(DefaultIO* Socket, string path){
-//     ofstream ResultsFile(path, ios::out | ios::trunc);
-//     string row;
-//     // Saving for the user the index and label.
-//     row = Socket -> read(); 
-//     do {
-//         ResultsFile << row << endl;
-//         row = Socket -> read();
-//     } while (row != "Done.");
-
-//     ResultsFile.close();
-// }

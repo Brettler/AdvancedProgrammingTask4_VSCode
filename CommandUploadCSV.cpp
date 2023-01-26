@@ -83,7 +83,7 @@ void CommandUploadCSV::execute(SharedData* shared) {
 
     // Validate the test file contents.
     bool ValidUploadUnclassified = shared -> GetUnclassifiedData() -> ReadUnclassifiedData(shared ->GetClassifiedData() -> GetDataMap());
-    if (!ValidUploadUnclassified){
+    if (!ValidUploadUnclassified) {
         dio -> write("invalid input\n");
         return;
     } else {

@@ -46,7 +46,7 @@ bool DataImport::ReadClassifiedData() {
 
         // Convert the sample vector segments into doubles if possible.
         vector<double> SampleDouble;
-        if (!ic.ValidStringToDouble(sample)){
+        if (!ic.ValidStringToDouble(sample)) {
             return false;
         } else {
             SampleDouble = ic.StringToDouble(sample);

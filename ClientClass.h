@@ -37,7 +37,6 @@ private:
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
-    // Destructor? ----------------------------------------------------------------------------------------------------
     // Functions:
     int run();
     void SendMessages(DefaultIO* ServerSocket);
