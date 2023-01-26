@@ -18,6 +18,8 @@
 #include <thread>
 #include <fstream>
 #include <mutex>
+#include <cstdlib>
+#include <ctime>
 #include "InputCheck.h"
 #include "DefaultIO.h"
 using namespace std;
@@ -30,8 +32,8 @@ private:
     DefaultIO* Socket;
     InputCheck InCheck;
     int counter = 1;
-    int SocketNum;
     string PerfectPath;
+
 public:
     // Constructor:
     ClientClass(const char* BufferIPAddress, int ClientPort);
@@ -42,6 +44,7 @@ public:
     void ReceiveMessages(DefaultIO* ServerSocket);
     void PrintMenu();
     bool InterfaceSendFile (string& path);
+    void SettingKNN(DefaultIO* Socket);
     void static DownloadFile(DefaultIO* Socket, string path);
     //void ClientInteraction(int ServerSocket, string output);
 };

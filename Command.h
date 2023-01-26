@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <cstdlib>
 #include <ctime>
+#include <mutex>
 #include "DefaultIO.h"
 #include "SharedData.h"
 #include "DataImport.h"

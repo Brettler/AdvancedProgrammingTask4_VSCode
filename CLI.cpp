@@ -53,13 +53,6 @@ void CLI::start() {
             CommandsVec.at(5) -> execute(this -> shared);
         }
         // Download command need to be in a diffrent thread
-        else if(UserChoise == 5){
-            thread download([this]()
-                            {CommandsVec.at(4) -> execute(this->shared);});
-            // This will run the thread in the background and allow the program to continue executing
-            download.detach();
-
-        }
         else {
             CommandsVec.at(UserChoise - 1) -> execute(this -> shared);    
         }
