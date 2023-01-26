@@ -3,6 +3,7 @@
 
 #ifndef HEADER_COMMAND_H
 #define HEADER_COMMAND_H
+
 #include <iostream>
 #include <string>
 #include <unistd.h>
@@ -17,7 +18,6 @@
 #include "KNN.h"
 using namespace std;
 
-
 class Command {
 protected:
     SharedData* shared;
@@ -30,6 +30,8 @@ public:
     virtual string GetDescription() = 0;
 };
 
+
+// #1
 class CommandUploadCSV : public Command {
 public:
     explicit CommandUploadCSV(DefaultIO* dio, SharedData* shared);
@@ -39,6 +41,7 @@ public:
     bool UploadFile(string FileCSV, string UploadMessage);
 };
 
+// #2
 class CommandSettingsKNN : public Command {
 public:
     explicit CommandSettingsKNN(DefaultIO* dio, SharedData* shared);
@@ -47,6 +50,7 @@ public:
     string GetDescription() override;
 };
 
+// #3
 class CommandClassify : public Command {
 public:
     explicit CommandClassify(DefaultIO* dio, SharedData* shared);
@@ -55,6 +59,7 @@ public:
     string GetDescription() override;
 };
 
+// #4
 class CommandDisplay : public Command {
 public:
     explicit CommandDisplay(DefaultIO* dio, SharedData* shared);
@@ -63,6 +68,7 @@ public:
     string GetDescription() override;
 };
 
+// #5
 class CommandDownload : public Command {
 public:
     explicit CommandDownload(DefaultIO* dio, SharedData* shared);
@@ -71,6 +77,7 @@ public:
     string GetDescription() override;
 };
 
+// #8
 class CommandExit : public Command {
 public:
     explicit CommandExit(DefaultIO* dio, SharedData* shared);
@@ -78,7 +85,5 @@ public:
     void execute(SharedData* shared) override;
     string GetDescription() override;
 };
-
-
 
 #endif //HEADER_COMMAND_H

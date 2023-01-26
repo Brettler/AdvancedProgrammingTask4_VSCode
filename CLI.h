@@ -20,7 +20,6 @@
 #include "DefaultIO.h"
 #include "SharedData.h"
 #include "Command.h"
-
 using namespace std;
 
 class CLI {
@@ -33,6 +32,7 @@ class CLI {
     CommandDownload* CommandDownRes;
     CommandExit* CommandKill;
     vector<Command*> CommandsVec;
+
 public:
     CLI(DefaultIO* dio, int ClientSockNum);
     void start();

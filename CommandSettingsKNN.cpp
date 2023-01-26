@@ -3,25 +3,28 @@
 
 #include "Command.h"
 
+// Constructor & Destructor:
 CommandSettingsKNN::CommandSettingsKNN(DefaultIO* dio, SharedData* shared)
         :Command(dio, shared) {
             this -> description = "2. algorithm settings\n";
         }
+CommandSettingsKNN::~CommandSettingsKNN() {}
 
-CommandSettingsKNN::~CommandSettingsKNN(){}
-
+// Set the K and metric values.
 void CommandSettingsKNN::execute(SharedData* shared) {
     InputCheck CheckObject;
     int k = shared -> GetK();
     string StringK = to_string(k);
     string metric = this -> shared -> GetMetric();
-    // Send to the client the k
-    dio -> write(StringK+'\n');
-    // Send to the client the metric
-    dio -> write(metric+'\n');
-    // Recive arugments from client
+
+    // Send the client the current K and metric values.
+    dio -> write(StringK + '\n');
+    dio -> write(metric + '\n');
+
+    // Recive arugments from the client.
     string InputSetting = dio -> read();
   
+    // Separate the string into two corresponding arguments.
     istringstream is(InputSetting);
     is >> StringK;
     k = CheckObject.ValidKNumber(StringK);
@@ -29,26 +32,29 @@ void CommandSettingsKNN::execute(SharedData* shared) {
     bool ValidMetric = CheckObject.ValidDistanceMetric(metric);
     bool ValidSizeK = true;
 
-    // Check if the user upload data, if not he cant choose k. 
+    // If the data has yet to be uploaded, a K value can't be chosen.
     if (shared -> ClassifiedData == nullptr) {
         ValidSizeK = false;
     }
 
+    // Validate the K and metric values.
     if (!ValidMetric && (k == -1 || !ValidSizeK )) {
         dio -> write("invalid_k_metric\n");
         return;
-    } else if(k == -1 || !ValidSizeK) {
+    } else if (k == -1 || !ValidSizeK) {
         dio -> write("invalid_k\n");
         return;
-    } else if(!ValidMetric) {
+    } else if (!ValidMetric) {
         dio -> write("invalid_metric\n");
         return;
     }
-    // Else we are update the new k and metric values
+
+    // Update the K and metric values.
     shared -> SetK(k);
     shared -> SetMetric(metric);
 }
 
+// Command Description.
 string CommandSettingsKNN::GetDescription() {
     return this -> description;
 }
