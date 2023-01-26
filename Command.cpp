@@ -9,4 +9,4 @@ Command::~Command(){}
 
 // Methods:
 void Command::execute(SharedData* shared) {}
-string Command::GetDescription() {}
+string Command::GetDescription() {return "Base class";}

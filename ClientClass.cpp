@@ -35,14 +35,13 @@ int ClientClass::run() {
 }
 
 // Execute commands according to user inputs.
-void ClientClass::ReceiveMessages(DefaultIO* ServerSocket) {
+void ClientClass::MenuInterface(DefaultIO* ServerSocket) {
     this -> Socket = ServerSocket;
     string input = "0";
     string respond = "0";
     
     // Command executer.
     do {
-        bool FlagEnter = false;
         PrintMenu();
         // Receiving user's command choice.
         cin >> input;

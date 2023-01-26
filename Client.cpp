@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 
     // Using functor to initialize the client's thread.
     thread ReceiveThread([&client, &ServerSocketIO]()
-                        { client.ReceiveMessages(&ServerSocketIO); });
+                        { client.MenuInterface(&ServerSocketIO); });
     ReceiveThread.join();
     close(SocketNumber);
 }
