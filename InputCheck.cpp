@@ -54,7 +54,7 @@ int InputCheck::ValidPortCheck(const string& PortString) const {
         }
         return PortInt;
     }
-    catch (exception& invalid_port_number) {
+    catch (const exception& invalid_port_number) {
         cerr << "Error: invalid port number, must be an integer." << endl;
         exit(1);
     }
@@ -82,13 +82,13 @@ void InputCheck::ValidIPv4Address(const string& ip) const {
     for (int i = 0; i < VecOctets.size(); ++i) {
         int OctetInt;
         try {
-            OctetInt = stoi(VecOctets[i]);
+            OctetInt = std::stoi(VecOctets[i]);
             if (OctetInt < 0 || OctetInt > 255) {
                 cerr << "Error: invalid IP address, each octet must be within the range 0-255." << endl;
                 exit(1);
             }
         }
-        catch(exception& invalid_IP_number) {
+        catch(const exception& invalid_IP_number) {
             cerr << "Error: invalid IP address, each octet must be an integer." << endl;
             exit(1);
         }
@@ -105,7 +105,7 @@ vector<double> InputCheck::StringToDouble(const vector<string>& s) const {
     }
     for (unsigned int i = 0; i < s.size(); i++) {
         try {
-            double feature = stod(s.at(i));
+            double feature = std::strtod(s.at(i).c_str(), nullptr);
             vec.push_back(feature);
         }
         catch (const invalid_argument& e) {
@@ -124,8 +124,8 @@ bool InputCheck::ValidStringToDouble(const vector<string>& s) const{
 
     for (unsigned int i = 0; i < s.size(); i++) {
         try {
-            double feature = stod(s.at(i));
-            vec.push_back(feature);
+            double feature = std::strtod(s.at(i).c_str(), nullptr);
+            vec.push_back(feature); 
         }
         catch (const invalid_argument& e) {
             return false;
@@ -151,7 +151,7 @@ int InputCheck::ValidKNumber(const string& k) const {
                 return -1;
             }
         }
-        int num = stoi(k);
+        int num = std::stoi(k);
         if (num > 0) {
             return num;
         }
@@ -159,7 +159,7 @@ int InputCheck::ValidKNumber(const string& k) const {
             return -1;
         }
     }
-    catch (exception& invalid_argument) {
+    catch (const exception& invalid_argument) {
         return -1;
     }
 }
@@ -167,12 +167,12 @@ int InputCheck::ValidKNumber(const string& k) const {
 // Check if the file exists and is not damaged.
 bool InputCheck::ValidFilePath(string DataName) {
     try {
-        ifstream file(DataName);
+        ifstream file(DataName.c_str());
         if (!file.good() || !file.is_open()) {
             return false;
         }
     }
-    catch (exception& damaged_file) {
+    catch (const exception& damaged_file) {
         return false;
     }
     return true;
