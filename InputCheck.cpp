@@ -48,7 +48,7 @@ int InputCheck::ValidPortCheck(const string& PortString) const {
         int PortInt = ValidKNumber(PortString);
 
         // If the port isn't a positive integer, or is out of range, terminate the program.
-        if (PortInt < -1 || PortInt > 65535) {
+        if (PortInt < 0 || PortInt > 65535) {
             cerr << "Error: invalid port number, must be in range [0-65535]" << endl;
             exit(1);
         }
