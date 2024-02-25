@@ -1,4 +1,4 @@
-# AdvancedProgrammingTask4_VSCode
+# KNN Algorithm - (Client_Server-TCP)
 Eden Berman &amp; Liad Brettler
 
 # Description:
